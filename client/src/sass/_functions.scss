@@ -1,0 +1,21 @@
+@import "./screens";
+
+@function max($vals...) {
+    @return m#{a}x(#{$vals});
+}
+
+@function min($vals...) {
+    @return m#{i}n(#{$vals});
+}
+
+@function min-vw($val) {
+    $vw-units: $val * 100/$threshold;
+    $min-units: min(#{$vw-units}vw, $val);
+    @return $min-units;
+}
+
+@function max-vw($val) {
+    $vw-units: $val * 100/$threshold;
+    $max-units: max(#{$vw-units}vw, $val);
+    @return $max-units;
+}
