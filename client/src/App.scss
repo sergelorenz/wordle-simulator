@@ -40,9 +40,10 @@ body {
   gap: 20px;
   height: calc(100vh - 57px);
 
-  div {
+  & > div {
     border: 1px solid white;
     flex-grow: 1;
+    flex-basis: 0;
     height: 100%;
   }
 }

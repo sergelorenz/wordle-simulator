@@ -1,0 +1,66 @@
+@import '../../../sass/colors';
+@import '../../../sass/functions';
+
+
+.selector {
+    height: min-vw(27px);
+    background-color: $light;
+    border: 1px solid $dark;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    
+    p {
+        padding: min-vw(10px);
+        font-weight: bold;
+    }
+
+    ul {
+        position: absolute;
+        transform: scaleY(0);
+        transition: transform 0.2s ease-in-out;
+        transform-origin: top;
+        background-color: $dark;
+        top: min-vw(27px);
+        left: 0;
+        width: inherit;
+        z-index: 100;
+
+        &.clicked {
+            transform: scaleY(1.0);
+        }
+
+        li {
+            transition: background-color 0.3s ease-out, color 0.1s ease-out;
+            background-color: $light;
+            color: inherit;
+            width: 99%;
+
+            &:first-child {
+                border-top-left-radius: 6px;
+                border-top-right-radius: 6px;
+            }
+
+            &:last-child {
+                border-bottom-left-radius: 6px;
+                border-bottom-right-radius: 6px;
+            }
+
+            &:hover {
+                background-color: $dark;
+                color: $light;
+            }
+        }
+    }
+
+    svg {
+        margin-right: min-vw(10px);
+    }
+}
