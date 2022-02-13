@@ -43,6 +43,7 @@ body {
   & > div {
     border: 1px solid white;
     flex-grow: 1;
+    flex-basis: 0;
     height: 100%;
   }
 }
