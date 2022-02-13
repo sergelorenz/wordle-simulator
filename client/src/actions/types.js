@@ -1,0 +1,1 @@
+export const SET_NUM_LETTERS = "SET_NUM_LETTERS";

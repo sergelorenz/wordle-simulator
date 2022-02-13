@@ -6,12 +6,12 @@ import {ReactComponent as Triangle} from '../../../res/svg/triangle.svg';
 import './Selector.scss';
 
 
-const Selector = ({listValues, handleClickOption = null, defaultValue = 0, width = '84px'}) => {
+const Selector = ({listValues, handleClickOption = null, value = 0, width = '84px'}) => {
     const [ open, setOpen ] = useState(false);
 
     const renderListValues = () => {
         return listValues.map((listValue, i) => (
-            <li key={i}>
+            <li key={i} onClick={e => handleClickOption(i)}>
                 <p>{listValue}</p>
             </li>
         ))
@@ -19,7 +19,7 @@ const Selector = ({listValues, handleClickOption = null, defaultValue = 0, width
 
     const identifyDefaultValue = () => {
         try {
-            return listValues[defaultValue]
+            return listValues[value]
         } catch(err) {
             return listValues[0]
         }

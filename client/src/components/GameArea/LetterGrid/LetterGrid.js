@@ -1,10 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux';
 
 import Selector from '../../generic/selector/Selector'
+
+import { setNumLetters } from '../../../actions/letterGrid';
+
 import './LetterGrid.scss';
 
-const LetterGrid = props => {
+const LetterGrid = ({numLetterIndex, setNumLetters}) => {
   const gameOptions = [
     '5-Letter Words',
     '6-Letter Words',
@@ -15,7 +19,7 @@ const LetterGrid = props => {
   return (
     <div className="parent-letter-grid">
         <div className="options">
-            <Selector listValues={gameOptions} width={'235px'} />
+            <Selector handleClickOption={setNumLetters} listValues={gameOptions} width={'235px'} value={numLetterIndex}/>
             <button>New Game</button>
         </div>
         <div className="letter-grid">
@@ -25,6 +29,13 @@ const LetterGrid = props => {
   )
 }
 
-LetterGrid.propTypes = {}
+LetterGrid.propTypes = {
+  numLetterIndex: PropTypes.number.isRequired
+}
 
-export default LetterGrid
+const mapStateToProps = state => ({
+  numLetterIndex: state.letterGrid.numLetterIndex,
+  setNumLetters: PropTypes.func.isRequired
+})
+
+export default connect(mapStateToProps, {setNumLetters})(LetterGrid)
