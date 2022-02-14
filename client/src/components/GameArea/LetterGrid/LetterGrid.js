@@ -6,6 +6,8 @@ import Selector from '../../generic/selector/Selector'
 
 import { setNumLetters } from '../../../actions/letterGrid';
 
+import { createInitialGrid } from '../../../utils/gridUtil';
+
 import './LetterGrid.scss';
 
 const LetterGrid = ({numLetterIndex, setNumLetters}) => {
@@ -15,6 +17,27 @@ const LetterGrid = ({numLetterIndex, setNumLetters}) => {
     '7-Letter Words',
     '8-Letter Words'
   ]
+
+  const gridStyle = {
+    fiveLetters: {
+
+    }
+  }
+
+  const indexToNumLetters = index => {
+    return index + 5;
+  }
+
+  const getTotalCells = index => {
+    return indexToNumLetters(index) * 6;
+  }
+
+  const renderGrid = () => {
+    const arrayGrid = createInitialGrid(indexToNumLetters(numLetterIndex));
+    return arrayGrid.map((cell, i) => (
+      <div key={i} className="cell" id={cell}></div>
+    ))
+  }
 
   return (
     <div className="parent-letter-grid">
