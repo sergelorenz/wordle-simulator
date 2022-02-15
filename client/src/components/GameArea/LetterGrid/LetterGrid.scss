@@ -22,4 +22,10 @@
             background-color: $accent;
         }
     }
+
+    .letter-grid {
+        margin-top: min-vw(34px);
+        display: grid;
+        justify-content: center;
+    }
 }
