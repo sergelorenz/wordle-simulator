@@ -19,6 +19,7 @@ npm install
 cd client
 npm install
 ```
+**Note:** You can use `npm ci` to ensure that the package versions used in this project are replicated
 
 ### 4. Start the project
 ```
