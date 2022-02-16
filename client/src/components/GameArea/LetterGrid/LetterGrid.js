@@ -9,6 +9,13 @@ import { setNumLetters } from '../../../actions/letterGrid';
 
 import { createInitialGrid } from '../../../utils/gridUtil';
 
+import {
+  FEEDBACK_CORRECT,
+  FEEDBACK_PRESENT,
+  FEEDBACK_WRONG,
+  FEEDBACK_NONE
+} from '../../../constants';
+
 import './LetterGrid.scss';
 
 const LetterGrid = ({numLetterIndex, setNumLetters}) => {
@@ -22,19 +29,23 @@ const LetterGrid = ({numLetterIndex, setNumLetters}) => {
   const gridStyle = {
     fiveLetters: {
       gridTemplateColumns: 'repeat(5, 76px)',
-      gridTemplateRows: 'repeat(6, 76px)'
+      gridTemplateRows: 'repeat(6, 76px)',
+      fontSize: '50px'
     },
     sixLetters: {
       gridTemplateColumns: 'repeat(6, 73px)',
-      gridTemplateRows: 'repeat(6, 73px)'
+      gridTemplateRows: 'repeat(6, 73px)',
+      fontSize: '48px'
     },
     sevenLetters: {
       gridTemplateColumns: 'repeat(7, 70px)',
-      gridTemplateRows: 'repeat(6, 70px)'
+      gridTemplateRows: 'repeat(6, 70px)',
+      fontSize: '46px'
     },
     eightLetters: {
       gridTemplateColumns: 'repeat(8, 68px)',
-      gridTemplateRows: 'repeat(6, 68px)'
+      gridTemplateRows: 'repeat(6, 68px)',
+      fontSize: '44px'
     }
   }
 
@@ -63,7 +74,7 @@ const LetterGrid = ({numLetterIndex, setNumLetters}) => {
 
   const renderGrid = () => {
     const arrayGrid = createInitialGrid(indexToNumLetters(numLetterIndex));
-    return arrayGrid.map((cell, i) => <Cell key={i} cellId={cell} />
+    return arrayGrid.map((cell, i) => <Cell key={i} cellId={cell} feedback={FEEDBACK_WRONG}/>
     )
   }
 
