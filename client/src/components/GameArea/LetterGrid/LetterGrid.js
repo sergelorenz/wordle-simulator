@@ -10,10 +10,10 @@ import { setNumLetters } from '../../../actions/letterGrid';
 import { createInitialGrid } from '../../../utils/gridUtil';
 
 import {
-  FEEDBACK_CORRECT,
-  FEEDBACK_PRESENT,
-  FEEDBACK_WRONG,
-  FEEDBACK_NONE
+  F_Co,
+  F_Pr,
+  F_Wr,
+  F_No
 } from '../../../constants';
 
 import './LetterGrid.scss';
@@ -74,7 +74,7 @@ const LetterGrid = ({numLetterIndex, setNumLetters}) => {
 
   const renderGrid = () => {
     const arrayGrid = createInitialGrid(indexToNumLetters(numLetterIndex));
-    return arrayGrid.map((cell, i) => <Cell key={i} cellId={cell} feedback={FEEDBACK_WRONG}/>
+    return arrayGrid.map((cell, i) => <Cell key={i} cellId={cell} />
     )
   }
 

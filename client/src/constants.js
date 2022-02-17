@@ -1,5 +1,5 @@
-// Feedback Colors
-export const FEEDBACK_CORRECT = 'FEEDBACK_CORRECT';
-export const FEEDBACK_PRESENT = 'FEEDBACK_PRESENT';
-export const FEEDBACK_WRONG = 'FEEDBACK_WRONG';
-export const FEEDBACK_NONE = 'FEEDBACK_NONE';
+// Cell Feedbacks
+export const F_Co = 'f_co'; // feedback correct
+export const F_Pr = 'f_pr'; // feedback present
+export const F_Wr = 'f_wr'; // feedback wrong
+export const F_No = 'f_n'; // feedback none

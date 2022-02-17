@@ -3,33 +3,33 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import {
-  FEEDBACK_CORRECT,
-  FEEDBACK_PRESENT,
-  FEEDBACK_WRONG,
-  FEEDBACK_NONE
+  F_Co,
+  F_Pr,
+  F_Wr,
+  F_No
 } from '../../../../constants'
 
 import './Cell.scss';
 
 const Cell = ({key, cellId, feedback}) => {
   const getClassCellLetter = () => {
-    if (feedback !== FEEDBACK_NONE) {
+    if (feedback !== F_No) {
       return 'cell-letter cell-empty';
     }
     return 'cell-letter';
   }
 
   const getClassFeedback = () => {
-    if (feedback === FEEDBACK_NONE) {
+    if (feedback === F_No) {
       return 'cell-feedback'
     } else {
       switch(feedback) {
-        case FEEDBACK_CORRECT:
+        case F_Co:
         default:
           return 'cell-feedback feedback-correct';
-        case FEEDBACK_PRESENT:
+        case F_Pr:
           return 'cell-feedback feedback-present';
-        case FEEDBACK_WRONG:
+        case F_Wr:
           return 'cell-feedback feedback-wrong'
       }
     }
