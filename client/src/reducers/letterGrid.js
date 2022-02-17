@@ -66,15 +66,15 @@ export default function (state = initialState, action) {
         case SET_CELL_LETTER:
             const {cellId, letter} = payload;
             const [row, col] = cellIdToRC(cellId);
-            const newGridLetters = gridCellLetters;
-            newGridLetters[row][col] = letter
+            let updatedGridLetters = state.gridCellLetters;
+            updatedGridLetters[row][col] = letter
             return {
                 ...state,
-                gridCellLetters: newGridLetters
+                gridCellLetters: updatedGridLetters
             };
         case INCREMENT_ACTIVE_CELL:
-            const [r, c] = activeCell;
-            const newActiveCell = (gridCellLetters[r][c + 1] ? [r, c + 1] : [r + 1, 0])
+            const [r, c] = state.activeCell;
+            const newActiveCell = (state.gridCellLetters[r][c + 1] ? [r, c + 1] : [r + 1, 0])
             return {
                 ...state,
                 activeCell: newActiveCell
@@ -83,3 +83,6 @@ export default function (state = initialState, action) {
             return state;
     }
 }
+
+
+

@@ -68,9 +68,7 @@ const LetterGrid = ({numLetterIndex, setNumLetters}) => {
     return index + 5;
   }
 
-  const getTotalCells = index => {
-    return indexToNumLetters(index) * 6;
-  }
+  
 
   const renderGrid = () => {
     const arrayGrid = createInitialGrid(indexToNumLetters(numLetterIndex));
@@ -93,7 +91,7 @@ const LetterGrid = ({numLetterIndex, setNumLetters}) => {
 
 LetterGrid.propTypes = {
   numLetterIndex: PropTypes.number.isRequired,
-  setNumLetters: PropTypes.func.isRequired
+  setNumLetters: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
