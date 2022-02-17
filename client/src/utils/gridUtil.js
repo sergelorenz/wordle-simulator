@@ -8,3 +8,12 @@ export const createInitialGrid = numLetters => {
     }
     return arrayGrid;
 }
+
+export const createBlankArray = (row, col, _fill) => {
+    return Array(row).fill().map(()=>Array(col).fill(_fill));
+}
+
+export const cellIdToRC = cellId => {
+    const [r, c] = cellId.split('_');
+    return [r - 1, c - 1];
+}
