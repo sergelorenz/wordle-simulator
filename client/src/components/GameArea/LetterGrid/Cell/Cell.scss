@@ -43,4 +43,20 @@
         display: block;
         background: $light;
     }
+
+    .active-cell {
+        display: none;
+
+        svg {
+            position: absolute;
+            width: 100%;
+            height: 140%;
+            top: -21%;
+            left: -2%;
+        }
+    }
+
+    .active-cell-active {
+        display: block;
+    }
 }

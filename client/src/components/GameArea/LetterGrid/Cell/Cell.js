@@ -2,6 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+import { cellIdToRC, equalCell } from '../../../../utils/gridUtil';
+
+import { ReactComponent as ActiveCell } from '../../../../res/svg/activeCell.svg'
+
 import {
   F_Co,
   F_Pr,
@@ -11,15 +15,15 @@ import {
 
 import './Cell.scss';
 
-const Cell = ({key, cellId, feedback}) => {
-  const getClassCellLetter = () => {
+const Cell = ({key, cellId, gridFeedback, gridLetters, activeCell}) => {
+  const getClassCellLetter = (feedback) => {
     if (feedback !== F_No) {
       return 'cell-letter cell-empty';
     }
     return 'cell-letter';
   }
 
-  const getClassFeedback = () => {
+  const getClassFeedback = (feedback) => {
     if (feedback === F_No) {
       return 'cell-feedback'
     } else {
@@ -35,10 +39,27 @@ const Cell = ({key, cellId, feedback}) => {
     }
   }
 
+  const getClassActiveCell = () => {
+    return equalCell(cellIdToRC(cellId), activeCell) ? 'active-cell active-cell-active' : 'active-cell'
+  }
+
+  const getLetter = () => {
+    const [r, c] = cellIdToRC(cellId);
+    return gridLetters[r][c];
+  }
+
+  const getFeedback = () => {
+    const [r, c] = cellIdToRC(cellId);
+    return gridFeedback[r][c]
+  }
+
   return (
     <div className="cell" key={key} id={cellId}>
-      <div className={getClassFeedback()} />
-      <div className={getClassCellLetter()}>H</div>
+      <div className={getClassFeedback(getFeedback())} />
+      <div className={getClassCellLetter(getFeedback())}>{getLetter()}</div>
+      <div className={getClassActiveCell()}>
+        <ActiveCell />
+      </div>
     </div>
   )
 }
@@ -46,15 +67,16 @@ const Cell = ({key, cellId, feedback}) => {
 Cell.propTypes = {
   key: PropTypes.number.isRequired,
   cellId: PropTypes.string.isRequired,
-  feedback: PropTypes.string.isRequired
+  gridFeedback: PropTypes.array.isRequired,
+  gridLetter: PropTypes.array.isRequired,
+  activeCell: PropTypes.array.isRequired
 }
 
-/*
-const mapStateToProps = state = ({
-  letter: state.letterGrid.letter,
-  letterFeedback: state.letterGrid.letterFeedback
+const mapStateToProps = state => ({
+  gridFeedback: state.letterGrid.letterGridCellFeedback,
+  gridLetters: state.letterGrid.gridCellLetters,
+  activeCell: state.letterGrid.activeCell
 })
 
 export default connect(mapStateToProps, {})(Cell)
-*/
-export default Cell
+
