@@ -1,0 +1,5 @@
+// Feedback Colors
+export const FEEDBACK_CORRECT = 'FEEDBACK_CORRECT';
+export const FEEDBACK_PRESENT = 'FEEDBACK_PRESENT';
+export const FEEDBACK_WRONG = 'FEEDBACK_WRONG';
+export const FEEDBACK_NONE = 'FEEDBACK_NONE';
