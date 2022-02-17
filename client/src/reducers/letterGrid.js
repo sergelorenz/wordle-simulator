@@ -1,5 +1,5 @@
-import { SET_NUM_LETTERS } from "../actions/types";
-import { createBlankArray } from "../utils/gridUtil";
+import { SET_NUM_LETTERS, SET_CELL_LETTER, INCREMENT_ACTIVE_CELL } from "../actions/types";
+import { createBlankArray, cellIdToRC } from "../utils/gridUtil";
 import { 
     F_Co,
     F_Pr,
@@ -24,7 +24,8 @@ const initialState = {
         [F_No, F_No, F_No, F_No, F_No],
         [F_No, F_No, F_No, F_No, F_No],
         [F_No, F_No, F_No, F_No, F_No]
-    ]
+    ],
+    activeCell: [0, 0]
 };
 
 // eslint-disable-next-line
@@ -56,11 +57,29 @@ export default function (state = initialState, action) {
             }
 
             return {
+                ...state,
                 numLetterIndex: payload,
                 letterGridCellFeedback: newGridFeedback,
                 gridCellLetters: newGridLetters
             };
-        default: 
+        
+        case SET_CELL_LETTER:
+            const {cellId, letter} = payload;
+            const [row, col] = cellIdToRC(cellId);
+            const newGridLetters = gridCellLetters;
+            newGridLetters[row][col] = letter
+            return {
+                ...state,
+                gridCellLetters: newGridLetters
+            };
+        case INCREMENT_ACTIVE_CELL:
+            const [r, c] = activeCell;
+            const newActiveCell = (gridCellLetters[r][c + 1] ? [r, c + 1] : [r + 1, 0])
+            return {
+                ...state,
+                activeCell: newActiveCell
+            }
+        default:
             return state;
     }
 }
