@@ -19,8 +19,12 @@ export const cellIdToRC = cellId => {
 }
 
 export const equalCell = (cell1, cell2) => {
-    if (cell1[0] == cell2[0] && cell1[1] == cell2[1]) {
+    if (cell1[0] === cell2[0] && cell1[1] === cell2[1]) {
         return true
     }
     return false
+}
+
+export const isValidKeyPress = keyCode => {
+    return (keyCode >= 65 && keyCode <= 90)
 }

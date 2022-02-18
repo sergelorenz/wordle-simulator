@@ -1,5 +1,5 @@
-import { SET_NUM_LETTERS, SET_CELL_LETTER, INCREMENT_ACTIVE_CELL } from "../actions/types";
-import { createBlankArray, cellIdToRC } from "../utils/gridUtil";
+import { SET_NUM_LETTERS, TRIGGER_LETTER_INPUT, TRIGGER_KEY_ENTER } from "../actions/types";
+import { createBlankArray } from "../utils/gridUtil";
 import { 
     F_Co,
     F_Pr,
@@ -25,7 +25,8 @@ const initialState = {
         [F_No, F_No, F_No, F_No, F_No],
         [F_No, F_No, F_No, F_No, F_No]
     ],
-    activeCell: [0, 0]
+    activeCell: [0, 0],
+    keyPressLock: false
 };
 
 // eslint-disable-next-line
@@ -39,6 +40,7 @@ export default function (state = initialState, action) {
             let newGridLetters;
             switch (numLetters) {
                 case 5:
+                default:
                     newGridFeedback = createBlankArray(6, 5, F_No);
                     newGridLetters = createBlankArray(6, 5, '');
                     break;
@@ -62,22 +64,37 @@ export default function (state = initialState, action) {
                 letterGridCellFeedback: newGridFeedback,
                 gridCellLetters: newGridLetters
             };
-        
-        case SET_CELL_LETTER:
-            const {cellId, letter} = payload;
-            const [row, col] = cellIdToRC(cellId);
-            let updatedGridLetters = state.gridCellLetters;
-            updatedGridLetters[row][col] = letter
+        case TRIGGER_LETTER_INPUT:
+            if (!state.keyPressLock) {
+                const [row, col] = state.activeCell;
+                let updatedGridLetters = state.gridCellLetters;
+                updatedGridLetters[row][col] = payload
+    
+                console.log(`${col + 1} vs ${state.numLetterIndex + 5}`)
+                let newActiveCell = [row, col + 1];
+                if (col + 1 >= state.numLetterIndex + 5) {
+                    return {
+                        ...state,
+                        gridCellLetters: updatedGridLetters,
+                        keyPressLock: true,
+                        activeCell: newActiveCell
+                    }
+                } else {
+                    return {
+                        ...state,
+                        gridCellLetters: updatedGridLetters,
+                        activeCell: newActiveCell
+                    }
+                }  
+            }
+            return state;
+        case TRIGGER_KEY_ENTER:
+            const r = state.activeCell[0]
+            const newRowActiveCell = [r + 1, 0]
             return {
                 ...state,
-                gridCellLetters: updatedGridLetters
-            };
-        case INCREMENT_ACTIVE_CELL:
-            const [r, c] = state.activeCell;
-            const newActiveCell = (state.gridCellLetters[r][c + 1] ? [r, c + 1] : [r + 1, 0])
-            return {
-                ...state,
-                activeCell: newActiveCell
+                activeCell: newRowActiveCell,
+                keyPressLock: false
             }
         default:
             return state;
