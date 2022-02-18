@@ -1,4 +1,8 @@
-import { SET_NUM_LETTERS, SET_CELL_LETTER, INCREMENT_ACTIVE_CELL } from "./types";
+import { 
+    SET_NUM_LETTERS, 
+    TRIGGER_KEY_ENTER, 
+    TRIGGER_LETTER_INPUT 
+} from "./types";
 
 export const setNumLetters = i => dispatch => {
     dispatch({
@@ -7,19 +11,17 @@ export const setNumLetters = i => dispatch => {
     });
 };
 
-export const setCellLetter = (cellId, letter) => dispatch => {
+export const triggerLetterInput = letter => dispatch => {
     dispatch({
-        type: SET_CELL_LETTER,
-        payload: {
-            cellId: cellId,
-            letter: letter
-        }
+        type: TRIGGER_LETTER_INPUT,
+        payload: letter
     })
 }
 
-export const incrementActiveCell = () => dispatch => {
+export const triggerKeyEnter = () => dispatch => {
     dispatch({
-        type: INCREMENT_ACTIVE_CELL,
+        type: TRIGGER_KEY_ENTER,
         payload: null
     })
 }
+
