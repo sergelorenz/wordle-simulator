@@ -1,4 +1,9 @@
-import { SET_NUM_LETTERS, TRIGGER_LETTER_INPUT, TRIGGER_KEY_ENTER } from "../actions/types";
+import { 
+    SET_NUM_LETTERS, 
+    TRIGGER_LETTER_INPUT, 
+    TRIGGER_KEY_ENTER,
+    SET_ALERT
+} from "../actions/types";
 import { createBlankArray } from "../utils/gridUtil";
 import { 
     F_Co,
@@ -97,6 +102,11 @@ export default function (state = initialState, action) {
                 ...state,
                 activeCell: newRowActiveCell,
                 keyPressLock: false
+            }
+        case SET_ALERT:
+            return {
+                ...state,
+                letterGridAlert: payload
             }
         default:
             return state;

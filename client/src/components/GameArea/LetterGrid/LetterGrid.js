@@ -4,17 +4,11 @@ import { connect } from 'react-redux';
 
 import Selector from '../../generic/selector/Selector'
 import Cell from './Cell/Cell';
+import Alert from './Alert';
 
 import { setNumLetters } from '../../../actions/letterGrid';
 
 import { createInitialGrid } from '../../../utils/gridUtil';
-
-import {
-  F_Co,
-  F_Pr,
-  F_Wr,
-  F_No
-} from '../../../constants';
 
 import './LetterGrid.scss';
 
@@ -85,6 +79,7 @@ const LetterGrid = ({numLetterIndex, setNumLetters}) => {
         <div className="letter-grid" style={getGridTemplate()}>
           {renderGrid()}
         </div>
+        <Alert />
     </div>
   )
 }

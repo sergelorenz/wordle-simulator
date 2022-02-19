@@ -1,4 +1,5 @@
 import { 
+    SET_ALERT,
     SET_NUM_LETTERS, 
     TRIGGER_KEY_ENTER, 
     TRIGGER_LETTER_INPUT 
@@ -25,3 +26,23 @@ export const triggerKeyEnter = () => dispatch => {
     })
 }
 
+export const closeAlert = () => dispatch => {
+    dispatch({
+        type: SET_ALERT,
+        payload: null
+    })
+}
+
+export const setAlertTimed = message => dispatch => {
+    dispatch({
+        type: SET_ALERT,
+        payload: message
+    });
+
+    setTimeout(() => {
+        dispatch({
+            type: SET_ALERT,
+            payload: null
+        })
+    }, 3000)
+}
