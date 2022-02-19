@@ -26,7 +26,8 @@ const initialState = {
         [F_No, F_No, F_No, F_No, F_No]
     ],
     activeCell: [0, 0],
-    keyPressLock: false
+    keyPressLock: false,
+    letterGridAlert: null
 };
 
 // eslint-disable-next-line
@@ -62,7 +63,9 @@ export default function (state = initialState, action) {
                 ...state,
                 numLetterIndex: payload,
                 letterGridCellFeedback: newGridFeedback,
-                gridCellLetters: newGridLetters
+                gridCellLetters: newGridLetters,
+                keyPressLock: false,
+                activeCell: [0, 0]
             };
         case TRIGGER_LETTER_INPUT:
             if (!state.keyPressLock) {
@@ -70,7 +73,6 @@ export default function (state = initialState, action) {
                 let updatedGridLetters = state.gridCellLetters;
                 updatedGridLetters[row][col] = payload
     
-                console.log(`${col + 1} vs ${state.numLetterIndex + 5}`)
                 let newActiveCell = [row, col + 1];
                 if (col + 1 >= state.numLetterIndex + 5) {
                     return {
