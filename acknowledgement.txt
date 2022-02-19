@@ -1,0 +1,6 @@
+### DATA USED IN THIS PROJECT ARE OBTAINED FROM THE FOLLOWING WEBSITES ###
+
+1. frequency distribution of words (english, includes proper nouns)
+    - https://www.kaggle.com/rtatman/english-word-frequency?select=unigram_freq.csv
+2. list of alphanumeric words
+    - https://github.com/dwyl/english-words/blob/master/words_alpha.txt
