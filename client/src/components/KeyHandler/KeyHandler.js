@@ -19,7 +19,6 @@ const KeyHandler = ({triggerLetterInput, triggerKeyEnter, setAlertTimed, gridCel
                 if (isCompleteWord(word)) {
                     triggerKeyEnter();
                 } else {
-                    console.log('Incomplete word');
                     setAlertTimed("That's an incomplete word.")
                 }
             }
@@ -30,7 +29,7 @@ const KeyHandler = ({triggerLetterInput, triggerKeyEnter, setAlertTimed, gridCel
         return function cleanup() {
             document.removeEventListener('keydown', handleKeyDown);
         }
-    }, [])
+    }, [activeCell])
 
     const formWord = () => {
         const activeCol = activeCell[0];
