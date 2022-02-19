@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types'
 
 import { isValidKeyPress } from "../../utils/gridUtil";
-import { triggerLetterInput, triggerKeyEnter } from "../../actions/letterGrid";
+import { triggerLetterInput, triggerKeyEnter, setAlertTimed } from "../../actions/letterGrid";
 
-const KeyHandler = ({triggerLetterInput, triggerKeyEnter, children}) => {
+const KeyHandler = ({triggerLetterInput, triggerKeyEnter, setAlertTimed, gridCellLetters, activeCell, numLetterIndex, children}) => {
     useEffect(() => {
         function handleKeyDown(e) {
             // letters
@@ -15,7 +15,13 @@ const KeyHandler = ({triggerLetterInput, triggerKeyEnter, children}) => {
 
             // enter key
             if (e.keyCode === 13) {
-                triggerKeyEnter();
+                const word = formWord();
+                if (isCompleteWord(word)) {
+                    triggerKeyEnter();
+                } else {
+                    console.log('Incomplete word');
+                    setAlertTimed("That's an incomplete word.")
+                }
             }
         }
 
@@ -26,13 +32,33 @@ const KeyHandler = ({triggerLetterInput, triggerKeyEnter, children}) => {
         }
     }, [])
 
+    const formWord = () => {
+        const activeCol = activeCell[0];
+        const word = gridCellLetters[activeCol].join('').trim();
+        return word
+    }
+
+    const isCompleteWord = word => {
+        return word.length == numLetterIndex + 5
+    }
+
     return <div>{children}</div>;
 };
 
 
 KeyHandler.propTypes = {
     triggerLetterInput: PropTypes.func.isRequired,
-    triggerKeyEnter: PropTypes.func.isRequired
+    triggerKeyEnter: PropTypes.func.isRequired,
+    setAlertTimed: PropTypes.func.isRequired,
+    activeCell: PropTypes.array.isRequired,
+    gridCellLetters: PropTypes.array.isRequired,
+    numLetterIndex: PropTypes.number.isRequired
 }
 
-export default connect(null, {triggerLetterInput, triggerKeyEnter})(KeyHandler);
+const mapStateToProps = state => ({
+    gridCellLetters: state.letterGrid.gridCellLetters,
+    activeCell: state.letterGrid.activeCell,
+    numLetterIndex: state.letterGrid.numLetterIndex
+})
+
+export default connect(mapStateToProps, {triggerLetterInput, triggerKeyEnter, setAlertTimed})(KeyHandler);

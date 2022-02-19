@@ -20,6 +20,7 @@
             font-size: min-vw(18px);
             font-weight: bold;
             background-color: $accent;
+            cursor: pointer;
         }
     }
 
@@ -27,5 +28,37 @@
         margin-top: min-vw(34px);
         display: grid;
         justify-content: center;
+    }
+
+    .alert {
+        margin-top: min-vw(34px);
+        height: min-vw(81px);
+        width: min-vw(431px);
+        background: transparent;
+        border: 2px $midtone solid;
+        margin-left: auto;
+        margin-right: auto;
+        border-radius: 16px;
+        position: relative;
+        display: none;
+        justify-content: center;
+        align-items: center;
+
+        &-show {
+            display: flex;
+        }
+
+        label {
+            font-size: min-vw(16px);
+            font-weight: bold;
+            color: $light;
+        }
+
+        .alert-close {
+            position: absolute;
+            top: 10%;
+            right: 3%;
+            cursor: pointer;
+        }
     }
 }
