@@ -11,7 +11,7 @@ def _read_file(path):
 def _write_to_file(path, new_word):
     open_mode = 'a' if os.path.exists(path) else 'w'
     with open(path, open_mode) as x:
-        x.write(f'new_word\n')
+        x.write(f'{new_word}\n')
 
 
 def _get_word_list(path):
