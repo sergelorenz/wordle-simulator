@@ -4,9 +4,9 @@ import PropTypes from 'prop-types'
 
 import { isValidKeyPress, gradeWord } from "../../utils/gridUtil";
 
-import { triggerLetterInput, setAlertTimed, setGuessFeedback } from "../../actions/letterGrid";
+import { triggerLetterInput, setAlertTimed, setGuessFeedback, triggerBackspace } from "../../actions/letterGrid";
 
-const KeyHandler = ({triggerLetterInput, setGuessFeedback, answer, setAlertTimed, gridCellLetters, activeCell, numLetterIndex, children}) => {
+const KeyHandler = ({triggerLetterInput, triggerBackspace, setGuessFeedback, answer, setAlertTimed, gridCellLetters, activeCell, numLetterIndex, children}) => {
     useEffect(() => {
         function handleKeyDown(e) {
             // letters
@@ -24,6 +24,11 @@ const KeyHandler = ({triggerLetterInput, setGuessFeedback, answer, setAlertTimed
                 } else {
                     setAlertTimed("That's an incomplete word.")
                 }
+            }
+
+            // backspace key
+            if (e.keyCode === 8) {
+                triggerBackspace();
             }
         }
 
@@ -53,7 +58,8 @@ KeyHandler.propTypes = {
     activeCell: PropTypes.array.isRequired,
     gridCellLetters: PropTypes.array.isRequired,
     numLetterIndex: PropTypes.number.isRequired,
-    setGuessFeedback: PropTypes.func.isRequired
+    setGuessFeedback: PropTypes.func.isRequired,
+    triggerBackspace: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
@@ -63,4 +69,4 @@ const mapStateToProps = state => ({
     answer: state.letterGrid.answer
 })
 
-export default connect(mapStateToProps, {triggerLetterInput, setAlertTimed, setGuessFeedback})(KeyHandler);
+export default connect(mapStateToProps, {triggerLetterInput, setAlertTimed, setGuessFeedback, triggerBackspace})(KeyHandler);

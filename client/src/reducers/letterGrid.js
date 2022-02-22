@@ -3,7 +3,8 @@ import {
     SET_ANSWER,
     TRIGGER_LETTER_INPUT, 
     SET_ALERT,
-    SET_GUESS_FEEDBACK
+    SET_GUESS_FEEDBACK,
+    TRIGGER_BACKSPACE
 } from "../actions/types";
 import { createBlankArray } from "../utils/gridUtil";
 import { 
@@ -119,6 +120,24 @@ export default function (state = initialState, action) {
                 letterGridCellFeedback: updatedGridFeedback,
                 activeCell: newRowActiveCell,
                 keyPressLock: false
+            }
+        case TRIGGER_BACKSPACE:
+            let [activeCellRow, activeCellCol] = state.activeCell;
+
+            if (activeCellCol === 0) {
+                return state;
+            } else {
+                activeCellCol--;
+                const newGridCellLetters = state.gridCellLetters;
+                const latestLetterGridRow = newGridCellLetters[activeCellRow];
+                latestLetterGridRow[activeCellCol] = '';
+                newGridCellLetters[activeCellRow] = latestLetterGridRow;
+                return {
+                    ...state,
+                    gridCellLetters: newGridCellLetters,
+                    keyPressLock: false,
+                    activeCell: [activeCellRow, activeCellCol]
+                }
             }
         default:
             return state;

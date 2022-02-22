@@ -3,6 +3,7 @@ import {
     SET_ANSWER,
     SET_GUESS_FEEDBACK,
     SET_NUM_LETTERS, 
+    TRIGGER_BACKSPACE, 
     TRIGGER_KEY_ENTER, 
     TRIGGER_LETTER_INPUT 
 } from "./types";
@@ -56,5 +57,12 @@ export const setGuessFeedback = (gradeFeedback, activeCol) => dispatch => {
             gradeFeedback: gradeFeedback,
             activeCol: activeCol
         }
+    })
+}
+
+export const triggerBackspace = () => dispatch => {
+    dispatch({
+        type: TRIGGER_BACKSPACE,
+        payload: null
     })
 }
