@@ -19,14 +19,3 @@ def pick_random_word():
         chosen_word = wordle_util.pick_word(num_letters)
         return jsonify({'chosen_word': chosen_word}), RESP_OK
     return jsonify({'error': 'bad request'}), RESP_BAD_REQUEST
-    
-
-    
-@app.route('/gradeGuess', methods=['POST'])
-def grade_guess():
-    if request.method == 'POST':
-        data = request.get_json()
-        guess = data['guess'].lower()
-        answer = data['answer'].lower()
-        grade = wordle_util.grade_word(guess, answer)
-        return jsonify({'grade': grade}), RESP_OK

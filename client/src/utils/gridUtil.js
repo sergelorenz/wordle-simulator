@@ -43,7 +43,6 @@ const indexWithGrade = grade => {
 const gradeWordCorrect = (guess, answer, numLetters) => {
     const grade = Array(numLetters).fill('');
     for (let i=0; i<numLetters; i++) {
-        console.log(`${guess[i]} vs ${answer[i]}`)
         if (guess[i] === answer[i]) {
             grade[i] = 'f_co'
         }

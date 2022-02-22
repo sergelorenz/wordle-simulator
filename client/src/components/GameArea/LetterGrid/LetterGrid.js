@@ -16,6 +16,7 @@ import './LetterGrid.scss';
 const LetterGrid = ({numLetterIndex, setNumLetters, setAnswer, setAlertTimed}) => {
   useEffect(() => {
     async function getRandomWord() {
+      console.log('Letter Grid Rerendered');
       const response = await pickRandomWord(numLetterIndex + 5)
       try {
         const chosenWord = response.data.chosen_word;
@@ -26,7 +27,7 @@ const LetterGrid = ({numLetterIndex, setNumLetters, setAnswer, setAlertTimed}) =
     }
     
     getRandomWord();
-  }, [])
+  }, [numLetterIndex])
 
   const gameOptions = [
     '5-Letter Words',

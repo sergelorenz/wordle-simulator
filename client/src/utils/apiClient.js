@@ -21,17 +21,3 @@ export const pickRandomWord = async numLetters => {
         return err.message;
     }
 }
-
-export const gradeGuess = async (guess, answer) => {
-    const url = BASE_URL + "/gradeGuess";
-    const body = {
-        guess: guess,
-        answer: answer
-    }
-    try {
-        const res = await axios.post(url, body, CONFIG);
-        return res;
-    } catch (err) {
-        return err;
-    }
-}
