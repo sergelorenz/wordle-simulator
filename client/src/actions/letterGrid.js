@@ -1,5 +1,6 @@
 import { 
     SET_ALERT,
+    SET_ANSWER,
     SET_NUM_LETTERS, 
     TRIGGER_KEY_ENTER, 
     TRIGGER_LETTER_INPUT 
@@ -45,4 +46,12 @@ export const setAlertTimed = message => dispatch => {
             payload: null
         })
     }, 3000)
+}
+
+export const setAnswer = newWord => dispatch => {
+    
+    dispatch({
+        type: SET_ANSWER,
+        payload: newWord
+    })
 }
