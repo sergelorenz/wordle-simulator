@@ -26,7 +26,7 @@ def pick_random_word():
 def grade_guess():
     if request.method == 'POST':
         data = request.get_json()
-        guess = data['guess']
-        answer = data['answer']
+        guess = data['guess'].lower()
+        answer = data['answer'].lower()
         grade = wordle_util.grade_word(guess, answer)
         return jsonify({'grade': grade}), RESP_OK

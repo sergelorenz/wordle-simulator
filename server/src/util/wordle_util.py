@@ -60,7 +60,7 @@ def _grade_word_correct(guess, answer, num_letters):
     grade = ['' for i in range(num_letters)]
     for i, (char_guess, char_answer) in enumerate(zip(guess, answer)):
         if char_guess == char_answer:
-            grade[i] = 'C'
+            grade[i] = 'f_co'
     return grade
 
 
@@ -78,12 +78,12 @@ def _grade_word_present(guess, answer, num_letters, grade):
         current_char = guess[i]
         try:
             answer_index = list_answer.index(current_char)
-            grade[i] = 'P'
+            grade[i] = 'f_pr'
             del list_answer[answer_index]
             i += 1
             continue
         except ValueError:
-            grade[i] = 'N'
+            grade[i] = 'f_wr'
             i += 1
             continue
     

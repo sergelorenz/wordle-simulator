@@ -28,3 +28,64 @@ export const equalCell = (cell1, cell2) => {
 export const isValidKeyPress = keyCode => {
     return (keyCode >= 65 && keyCode <= 90)
 }
+
+const indexWithGrade = grade => {
+    let hasGrade = []
+    for (let i=0; i<grade.length; i++) {
+        if (grade[i] !== '') {
+            hasGrade.push(i);
+        }
+    }
+    return hasGrade.reverse()
+
+}
+
+const gradeWordCorrect = (guess, answer, numLetters) => {
+    const grade = Array(numLetters).fill('');
+    for (let i=0; i<numLetters; i++) {
+        console.log(`${guess[i]} vs ${answer[i]}`)
+        if (guess[i] === answer[i]) {
+            grade[i] = 'f_co'
+        }
+    }
+    return grade;
+}
+
+const gradeWordPresent = (guess, answer, numLetters, grade) => {
+    let hasGrade = indexWithGrade(grade);
+    let listAnswer = [...answer];
+    hasGrade.forEach((_, index) => listAnswer.splice(index, index))
+
+    let i = 0;
+    while (i < numLetters) {
+        if (grade[i] !== '') {
+            i++;
+            continue;
+        }
+        let answerIndex = listAnswer.indexOf(guess[i]);
+        if (answerIndex === -1) {
+            grade[i] = 'f_wr';
+            i++;
+            continue; 
+        } else {
+            grade[i] = 'f_pr';
+            listAnswer.splice(answerIndex, answerIndex);
+            i++;
+            continue;
+        }
+    }
+
+    return grade
+}
+
+export const gradeWord = (guess, answer) => {
+    let numLetters = guess.length;
+    // method for correct characters
+    let grade = gradeWordCorrect(guess, answer, numLetters);
+
+
+    // method for present characters;
+    grade = gradeWordPresent(guess, answer, numLetters, grade);
+
+    return grade;
+}
