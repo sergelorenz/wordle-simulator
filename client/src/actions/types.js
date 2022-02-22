@@ -2,3 +2,4 @@ export const SET_NUM_LETTERS = "SET_NUM_LETTERS";
 export const TRIGGER_LETTER_INPUT = "TRIGGER_LETTER_INPUT";
 export const TRIGGER_KEY_ENTER = "TRIGGER_KEY_ENTER";
 export const SET_ALERT = "SET_ALERT";
+export const SET_ANSWER = "SET_ANSWER";

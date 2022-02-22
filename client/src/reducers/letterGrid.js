@@ -1,5 +1,6 @@
 import { 
     SET_NUM_LETTERS, 
+    SET_ANSWER,
     TRIGGER_LETTER_INPUT, 
     TRIGGER_KEY_ENTER,
     SET_ALERT
@@ -32,7 +33,8 @@ const initialState = {
     ],
     activeCell: [0, 0],
     keyPressLock: false,
-    letterGridAlert: null
+    letterGridAlert: null,
+    answer: null
 };
 
 // eslint-disable-next-line
@@ -107,6 +109,11 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 letterGridAlert: payload
+            }
+        case SET_ANSWER:
+            return {
+                ...state,
+                answer: payload
             }
         default:
             return state;
