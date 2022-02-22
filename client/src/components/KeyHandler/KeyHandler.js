@@ -2,10 +2,11 @@ import React, { useEffect } from "react";
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types'
 
-import { isValidKeyPress } from "../../utils/gridUtil";
-import { triggerLetterInput, triggerKeyEnter, setAlertTimed } from "../../actions/letterGrid";
+import { isValidKeyPress, gradeWord } from "../../utils/gridUtil";
 
-const KeyHandler = ({triggerLetterInput, triggerKeyEnter, setAlertTimed, gridCellLetters, activeCell, numLetterIndex, children}) => {
+import { triggerLetterInput, setAlertTimed, setGuessFeedback, triggerBackspace } from "../../actions/letterGrid";
+
+const KeyHandler = ({triggerLetterInput, triggerBackspace, setGuessFeedback, answer, setAlertTimed, gridCellLetters, activeCell, numLetterIndex, children}) => {
     useEffect(() => {
         function handleKeyDown(e) {
             // letters
@@ -15,12 +16,19 @@ const KeyHandler = ({triggerLetterInput, triggerKeyEnter, setAlertTimed, gridCel
 
             // enter key
             if (e.keyCode === 13) {
-                const word = formWord();
+                const activeCol = activeCell[0];
+                const word = formWord(activeCol);
                 if (isCompleteWord(word)) {
-                    triggerKeyEnter();
+                    const grade = gradeWord(word.toLowerCase(), answer.toLowerCase());
+                    setGuessFeedback(grade, activeCol);
                 } else {
                     setAlertTimed("That's an incomplete word.")
                 }
+            }
+
+            // backspace key
+            if (e.keyCode === 8) {
+                triggerBackspace();
             }
         }
 
@@ -29,16 +37,15 @@ const KeyHandler = ({triggerLetterInput, triggerKeyEnter, setAlertTimed, gridCel
         return function cleanup() {
             document.removeEventListener('keydown', handleKeyDown);
         }
-    }, [activeCell])
+    }, [activeCell, setGuessFeedback, answer, setAlertTimed, triggerLetterInput, children])
 
-    const formWord = () => {
-        const activeCol = activeCell[0];
+    const formWord = activeCol => {
         const word = gridCellLetters[activeCol].join('').trim();
         return word
     }
 
     const isCompleteWord = word => {
-        return word.length == numLetterIndex + 5
+        return word.length === numLetterIndex + 5
     }
 
     return <div>{children}</div>;
@@ -47,17 +54,19 @@ const KeyHandler = ({triggerLetterInput, triggerKeyEnter, setAlertTimed, gridCel
 
 KeyHandler.propTypes = {
     triggerLetterInput: PropTypes.func.isRequired,
-    triggerKeyEnter: PropTypes.func.isRequired,
     setAlertTimed: PropTypes.func.isRequired,
     activeCell: PropTypes.array.isRequired,
     gridCellLetters: PropTypes.array.isRequired,
-    numLetterIndex: PropTypes.number.isRequired
+    numLetterIndex: PropTypes.number.isRequired,
+    setGuessFeedback: PropTypes.func.isRequired,
+    triggerBackspace: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
     gridCellLetters: state.letterGrid.gridCellLetters,
     activeCell: state.letterGrid.activeCell,
-    numLetterIndex: state.letterGrid.numLetterIndex
+    numLetterIndex: state.letterGrid.numLetterIndex,
+    answer: state.letterGrid.answer
 })
 
-export default connect(mapStateToProps, {triggerLetterInput, triggerKeyEnter, setAlertTimed})(KeyHandler);
+export default connect(mapStateToProps, {triggerLetterInput, setAlertTimed, setGuessFeedback, triggerBackspace})(KeyHandler);

@@ -26,7 +26,7 @@ const LetterGrid = ({numLetterIndex, setNumLetters, setAnswer, setAlertTimed}) =
     }
     
     getRandomWord();
-  }, [])
+  }, [numLetterIndex])
 
   const gameOptions = [
     '5-Letter Words',

@@ -23,7 +23,7 @@ const Cell = ({key, cellId, gridFeedback, gridLetters, activeCell}) => {
     return 'cell-letter';
   }
 
-  const getClassFeedback = (feedback) => {
+  const getClassFeedback = feedback => {
     if (feedback === F_No) {
       return 'cell-feedback'
     } else {
