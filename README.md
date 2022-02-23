@@ -1,7 +1,7 @@
 # wordle-simulator
 A Wordle Game Simulator where you can practice your Wordle skills and gives you statistics about your guesses.
 
-## How to Setup
+## How to Setup - Frontend/Client Side
 ### 1. Clone this repository
 ```
 git clone https://github.com/sergelorenz/wordle-simulator.git
@@ -28,4 +28,49 @@ npm start
 
 ### 5. By default, the project should be hosted on localhost:3000. Otherwise, you'll find it in console outputs on what port the project is hosted.
 
-### 6. Enjoy!
+## How to Setup - Backend/Server Side
+### 1. Make sure you have python 3. (Python used in this application is version 3.7.0).
+
+### 2. In a separate terminal, go to server folder
+```
+cd server
+```
+
+### 3. Create a virtual environment
+```
+python -m venv .venv
+```
+
+### 4. Activate the virtual environment
+Windows:
+```
+.venv\Scripts\activate
+```
+Linux or Mac
+```
+source .venv/bin/activate
+```
+
+### 5. Update pip package in the virtual environment
+```
+python -m pip install --upgrade pip
+```
+
+### 6. Install the packages found in requirements.txt
+```
+pip install -r requirements.txt
+```
+
+### 7. Run main.py
+Windows:
+```
+python main.py
+```
+
+Linux or Mac
+```
+python3 main.py
+```
+
+
+## ENJOY!
