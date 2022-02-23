@@ -5,6 +5,6 @@ def _get_project_directory():
     return dirname(dirname(dirname(abspath(__file__))))
 
 
-def rel_path(path):
+def to_abs_path(path):
     proj = _get_project_directory()
     return join(proj, path)
