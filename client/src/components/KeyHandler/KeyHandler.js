@@ -2,11 +2,11 @@ import React, { useEffect } from "react";
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types'
 
-import { isValidKeyPress, gradeWord } from "../../utils/gridUtil";
+import { isValidKeyPress, gradeWord, isInWordList } from "../../utils/gridUtil";
 
 import { triggerLetterInput, setAlertTimed, setGuessFeedback, triggerBackspace } from "../../actions/letterGrid";
 
-const KeyHandler = ({triggerLetterInput, triggerBackspace, setGuessFeedback, answer, setAlertTimed, gridCellLetters, activeCell, numLetterIndex, children}) => {
+const KeyHandler = ({triggerLetterInput, triggerBackspace, setGuessFeedback, answer, setAlertTimed, gridCellLetters, activeCell, numLetterIndex, children, wordList}) => {
     useEffect(() => {
         function handleKeyDown(e) {
             // letters
@@ -17,10 +17,15 @@ const KeyHandler = ({triggerLetterInput, triggerBackspace, setGuessFeedback, ans
             // enter key
             if (e.keyCode === 13) {
                 const activeCol = activeCell[0];
-                const word = formWord(activeCol);
+                const word = formWord(activeCol).toLowerCase();
                 if (isCompleteWord(word)) {
-                    const grade = gradeWord(word.toLowerCase(), answer.toLowerCase());
-                    setGuessFeedback(grade, activeCol);
+                    if (isInWordList(wordList, word)) {
+                        const grade = gradeWord(word, answer.toLowerCase());
+                        setGuessFeedback(grade, activeCol);
+                    } else {
+                        setAlertTimed(`${word.toUpperCase()} is not a valid word.`)
+                    }
+
                 } else {
                     setAlertTimed("That's an incomplete word.")
                 }
@@ -59,14 +64,16 @@ KeyHandler.propTypes = {
     gridCellLetters: PropTypes.array.isRequired,
     numLetterIndex: PropTypes.number.isRequired,
     setGuessFeedback: PropTypes.func.isRequired,
-    triggerBackspace: PropTypes.func.isRequired
+    triggerBackspace: PropTypes.func.isRequired,
+    wordList: PropTypes.array.isRequired
 }
 
 const mapStateToProps = state => ({
     gridCellLetters: state.letterGrid.gridCellLetters,
     activeCell: state.letterGrid.activeCell,
     numLetterIndex: state.letterGrid.numLetterIndex,
-    answer: state.letterGrid.answer
+    answer: state.letterGrid.answer,
+    wordList: state.letterGrid.wordList
 })
 
 export default connect(mapStateToProps, {triggerLetterInput, setAlertTimed, setGuessFeedback, triggerBackspace})(KeyHandler);

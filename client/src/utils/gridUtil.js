@@ -88,3 +88,8 @@ export const gradeWord = (guess, answer) => {
 
     return grade;
 }
+
+export const isInWordList = (wordList, word) => {
+    let index = wordList.indexOf(word);
+    return index !== -1;
+}
