@@ -3,8 +3,8 @@ import {
     SET_ANSWER,
     SET_GUESS_FEEDBACK,
     SET_NUM_LETTERS, 
+    SET_WORD_LIST, 
     TRIGGER_BACKSPACE, 
-    TRIGGER_KEY_ENTER, 
     TRIGGER_LETTER_INPUT 
 } from "./types";
 
@@ -47,6 +47,13 @@ export const setAnswer = newWord => dispatch => {
     dispatch({
         type: SET_ANSWER,
         payload: newWord
+    })
+}
+
+export const setWordList = wordList => dispatch => {
+    dispatch({
+        type: SET_WORD_LIST,
+        payload: wordList
     })
 }
 

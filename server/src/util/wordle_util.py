@@ -1,5 +1,5 @@
 import os, random
-from config import CACHE_DIR, WORD_LIST_DIR
+from config import CACHE_DIR, WORD_LIST_DIR, FIRST_N_WORDS
 from src.util import file_handler
 
 
@@ -42,7 +42,7 @@ def pick_word(num_letters):
     list_words_path = os.path.join(list_words_dir, f'word_list-{num_letters}.txt')
 
     cached_words = _get_word_list(cached_words_path)
-    list_words = _get_word_list(list_words_path)
+    list_words = _get_word_list(list_words_path)[:FIRST_N_WORDS + 1]
 
     chosen_word = select_randomly(list_words, cached_words, cached_words_path)
     return chosen_word

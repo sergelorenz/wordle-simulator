@@ -4,15 +4,11 @@ import {
     TRIGGER_LETTER_INPUT, 
     SET_ALERT,
     SET_GUESS_FEEDBACK,
-    TRIGGER_BACKSPACE
+    TRIGGER_BACKSPACE,
+    SET_WORD_LIST
 } from "../actions/types";
 import { createBlankArray } from "../utils/gridUtil";
-import { 
-    F_Co,
-    F_Pr,
-    F_Wr,
-    F_No
- } from "../constants";
+import { F_No } from "../constants";
 
 const initialState = {
     numLetterIndex: 0,
@@ -35,7 +31,8 @@ const initialState = {
     activeCell: [0, 0],
     keyPressLock: false,
     letterGridAlert: null,
-    answer: null
+    answer: null,
+    wordList: []
 };
 
 // eslint-disable-next-line
@@ -107,6 +104,11 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 answer: payload
+            }
+        case SET_WORD_LIST:
+            return {
+                ...state,
+                wordList: payload
             }
         case SET_GUESS_FEEDBACK:
             const {gradeFeedback, activeCol} = payload

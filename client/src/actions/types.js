@@ -4,3 +4,4 @@ export const TRIGGER_BACKSPACE = "TRIGGER_BACKSPACE";
 export const SET_ALERT = "SET_ALERT";
 export const SET_ANSWER = "SET_ANSWER";
 export const SET_GUESS_FEEDBACK = "SET_GUESS_FEEDBACK";
+export const SET_WORD_LIST = "SET_WORD_LIST";
