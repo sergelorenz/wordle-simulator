@@ -18,6 +18,16 @@ export const pickRandomWord = async numLetters => {
         const res = await axios.post(url, body, CONFIG);
         return res;
     } catch (err) {
-        return err.message;
+        return err;
+    }
+}
+
+export const getWordListApi = async numLetters => {
+    const url = BASE_URL + `/getWordList/${numLetters}`;
+    try {
+        const res = await axios.get(url);
+        return res;
+    } catch (err) {
+        return err
     }
 }
