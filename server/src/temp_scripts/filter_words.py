@@ -30,10 +30,6 @@ def run():
         text_string_filtered = '\n'.join(list_text_filtered)
         write_file(path, text_string_filtered, i)
 
-        # Trimming was manually done to determine which part do the words start to become unfamiliar
-
-
-
 
 if __name__ == '__main__':
     run()
