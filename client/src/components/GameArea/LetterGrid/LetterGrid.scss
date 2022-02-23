@@ -32,8 +32,9 @@
 
     .alert {
         margin-top: min-vw(34px);
-        height: min-vw(81px);
-        width: min-vw(431px);
+        min-height: min-vw(81px);
+        min-width: min-vw(431px);
+        padding: min-vw(20px);
         background: transparent;
         border: 2px $midtone solid;
         margin-left: auto;

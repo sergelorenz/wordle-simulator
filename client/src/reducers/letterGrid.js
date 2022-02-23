@@ -1,8 +1,10 @@
 import { 
     SET_NUM_LETTERS, 
+    SET_ANSWER,
     TRIGGER_LETTER_INPUT, 
-    TRIGGER_KEY_ENTER,
-    SET_ALERT
+    SET_ALERT,
+    SET_GUESS_FEEDBACK,
+    TRIGGER_BACKSPACE
 } from "../actions/types";
 import { createBlankArray } from "../utils/gridUtil";
 import { 
@@ -32,7 +34,8 @@ const initialState = {
     ],
     activeCell: [0, 0],
     keyPressLock: false,
-    letterGridAlert: null
+    letterGridAlert: null,
+    answer: null
 };
 
 // eslint-disable-next-line
@@ -95,18 +98,46 @@ export default function (state = initialState, action) {
                 }  
             }
             return state;
-        case TRIGGER_KEY_ENTER:
-            const r = state.activeCell[0]
-            const newRowActiveCell = [r + 1, 0]
-            return {
-                ...state,
-                activeCell: newRowActiveCell,
-                keyPressLock: false
-            }
         case SET_ALERT:
             return {
                 ...state,
                 letterGridAlert: payload
+            }
+        case SET_ANSWER:
+            return {
+                ...state,
+                answer: payload
+            }
+        case SET_GUESS_FEEDBACK:
+            const {gradeFeedback, activeCol} = payload
+            const updatedGridFeedback = state.letterGridCellFeedback;
+            updatedGridFeedback[activeCol] = gradeFeedback;
+
+            const r = state.activeCell[0]
+            const newRowActiveCell = [r + 1, 0]
+            return {
+                ...state,
+                letterGridCellFeedback: updatedGridFeedback,
+                activeCell: newRowActiveCell,
+                keyPressLock: false
+            }
+        case TRIGGER_BACKSPACE:
+            let [activeCellRow, activeCellCol] = state.activeCell;
+
+            if (activeCellCol === 0) {
+                return state;
+            } else {
+                activeCellCol--;
+                const newGridCellLetters = state.gridCellLetters;
+                const latestLetterGridRow = newGridCellLetters[activeCellRow];
+                latestLetterGridRow[activeCellCol] = '';
+                newGridCellLetters[activeCellRow] = latestLetterGridRow;
+                return {
+                    ...state,
+                    gridCellLetters: newGridCellLetters,
+                    keyPressLock: false,
+                    activeCell: [activeCellRow, activeCellCol]
+                }
             }
         default:
             return state;

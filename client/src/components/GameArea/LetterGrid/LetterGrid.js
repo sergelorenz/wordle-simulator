@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux';
 
@@ -6,13 +6,28 @@ import Selector from '../../generic/selector/Selector'
 import Cell from './Cell/Cell';
 import Alert from './Alert';
 
-import { setNumLetters } from '../../../actions/letterGrid';
+import { setNumLetters, setAnswer, setAlertTimed } from '../../../actions/letterGrid';
 
 import { createInitialGrid } from '../../../utils/gridUtil';
+import { pickRandomWord } from '../../../utils/apiClient';
 
 import './LetterGrid.scss';
 
-const LetterGrid = ({numLetterIndex, setNumLetters}) => {
+const LetterGrid = ({numLetterIndex, setNumLetters, setAnswer, setAlertTimed}) => {
+  useEffect(() => {
+    async function getRandomWord() {
+      const response = await pickRandomWord(numLetterIndex + 5)
+      try {
+        const chosenWord = response.data.chosen_word;
+        setAnswer(chosenWord);
+      } catch (err) {
+        setAlertTimed(err.message)
+      }
+    }
+    
+    getRandomWord();
+  }, [numLetterIndex])
+
   const gameOptions = [
     '5-Letter Words',
     '6-Letter Words',
@@ -62,8 +77,6 @@ const LetterGrid = ({numLetterIndex, setNumLetters}) => {
     return index + 5;
   }
 
-  
-
   const renderGrid = () => {
     const arrayGrid = createInitialGrid(indexToNumLetters(numLetterIndex));
     return arrayGrid.map((cell, i) => <Cell key={i} cellId={cell} />
@@ -87,10 +100,12 @@ const LetterGrid = ({numLetterIndex, setNumLetters}) => {
 LetterGrid.propTypes = {
   numLetterIndex: PropTypes.number.isRequired,
   setNumLetters: PropTypes.func.isRequired,
+  setAnswer: PropTypes.func.isRequired,
+  setAlertTimed: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
   numLetterIndex: state.letterGrid.numLetterIndex,
 })
 
-export default connect(mapStateToProps, {setNumLetters})(LetterGrid)
+export default connect(mapStateToProps, {setNumLetters, setAnswer, setAlertTimed})(LetterGrid)
