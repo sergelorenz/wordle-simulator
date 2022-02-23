@@ -46,3 +46,10 @@ def pick_word(num_letters):
 
     chosen_word = select_randomly(list_words, cached_words, cached_words_path)
     return chosen_word
+
+
+def get_word_list_by_num_letters(num_letters):
+    list_words_dir = file_handler.rel_path(WORD_LIST_DIR)
+    list_words_path = os.path.join(list_words_dir, f'word_list-{num_letters}.txt')
+
+    return _get_word_list(list_words_path)
