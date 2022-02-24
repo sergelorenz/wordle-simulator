@@ -28,3 +28,33 @@ def get_word_list(num_letters):
         return jsonify({'word_list': list_words}), RESP_OK
     return jsonify({'error': 'bad request'}), RESP_BAD_REQUEST
 
+
+@app.route('/findCorrectGuesses', methods=['POST'])
+def find_correct_guesses():
+    if request.method == 'POST':
+        data = request.get_json()
+        latest_column = int(data['latest_column']) - 1
+        list_guesses = data['list_guesses']
+        list_feedbacks = data['list_feedbacks']
+
+        if latest_column == -1:
+            wordle_util.find_correct_guesses(latest_column, list_guesses[0], list_feedbacks[0])
+        else:
+            list_guesses = data['list_guesses']
+            list_feedbacks = data['list_feedbacks']
+
+            latest_guess = list_guesses[latest_column]
+            latest_feedback = list_feedbacks[latest_column]
+
+            wordle_util.find_correct_guesses(latest_column, latest_guess, latest_feedback)
+        
+        return jsonify({'message': 'done'}), RESP_OK
+    return jsonify({'error': 'bad request'}), RESP_BAD_REQUEST
+
+
+@app.route('/getResultsCorrectGuesses', methods=['GET'])
+def get_results_correct_guesses():
+    if request.method == 'GET':
+        word_list = wordle_util.get_results_correct_guesses()
+        return jsonify({'possible_guesses': word_list})
+    return jsonify({'error': 'bad request'}), RESP_BAD_REQUEST

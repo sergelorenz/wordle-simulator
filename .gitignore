@@ -2,5 +2,6 @@ node_modules
 client/node_modules
 server/.venv
 server/res/cache
+server/res/tmp/possible_guesses.txt
 !server/res/cache/README.md
 __pycache__/
