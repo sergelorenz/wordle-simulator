@@ -85,51 +85,60 @@ def add_word_to_possible_guesses(word):
 
 def _is_correct_guess_for_correct(guess, feedback, word):
     # for correct feedback
+    word = list(word)
     is_correct = True
+    index_to_clear = []
     for i, f in enumerate(feedback):
         if f == 'f_co': # correct guess
             if guess[i] == word[i]:
                 is_correct = True
+                index_to_clear.append(i)
             else:
                 is_correct = False
                 break
-    return is_correct
+    
+    index_to_clear = index_to_clear[::-1]
+    for index in index_to_clear:
+        del word[index]
+    return is_correct, word
 
 
-def _is_correct_guess_for_present(guess, feedback, word):
+def _is_correct_guess_for_present(guess, feedback, char_word):
     # for present feedback
-    word = list(word)
     is_correct = True
     for i, f in enumerate(feedback):
         if f == 'f_pr': # correct guess
             try:
-                index = word.index(guess[i])
+                index = char_word.index(guess[i])
                 is_correct = True
-                del word[index]
+                del char_word[index]
             except ValueError:
                 is_correct = False
                 break
-    return is_correct
+    return is_correct, char_word
 
 
-def _is_correct_guess_for_wrong(guess, feedback, word):
+def _is_correct_guess_for_wrong(guess, feedback, char_word):
     # for wrong feedback
     is_correct = True
-    letters_to_skip = []
     for i, f in enumerate(feedback):
-        if f == 'f_co' or f == 'f_pr':
-            letters_to_skip.append(guess[i])
         if f == 'f_wr':
-            if guess[i] not in word and guess[i] not in letters_to_skip:
+            if guess[i] not in char_word and guess[i]:
                 is_correct = True
             else:
                 is_correct = False
                 break
-    print(f'FOR WRONG --> {guess} vs {word} with feedback = {feedback} and letters to skip = {letters_to_skip} => {is_correct}')
     return is_correct
 
 def _is_correct_guess(guess, feedback, word):
-    return _is_correct_guess_for_correct(guess, feedback, word) and _is_correct_guess_for_present(guess, feedback, word) and _is_correct_guess_for_wrong(guess, feedback, word)
+    is_correct, char_word = _is_correct_guess_for_correct(guess, feedback, word)
+    if is_correct:
+        is_correct, char_word = _is_correct_guess_for_present(guess, feedback, char_word)
+        if is_correct:
+            is_correct = _is_correct_guess_for_wrong(guess, feedback, char_word)
+    
+    print(f'{guess} vs {word} with feedback => {feedback} = {is_correct}')
+    return is_correct
 
 
 def find_correct_guesses(latest_column, guess=None, feedback=None):
