@@ -1,0 +1,1 @@
+This is the directory for possible_guesses for the statistics in wordle-simulator. This is done this way so client side can regularly call the API and gather possible guesses based on feedback - without waiting for the scan to finish.
