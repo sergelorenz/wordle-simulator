@@ -34,7 +34,7 @@ def select_randomly(list_words, cached_words, cached_words_path):
     return chosen_word
 
 
-def get_word_list_by_num_letters(num_letters, word_list_type='main'):
+def get_word_list_by_num_letters(num_letters=None, word_list_type='main'):
     if word_list_type == 'main':
         word_list_dir = WORD_LIST_DIR
         file_name = f'word_list-{num_letters}.txt'
@@ -137,7 +137,6 @@ def _is_correct_guess(guess, feedback, word):
         if is_correct:
             is_correct = _is_correct_guess_for_wrong(guess, feedback, char_word)
     
-    print(f'{guess} vs {word} with feedback => {feedback} = {is_correct}')
     return is_correct
 
 
@@ -155,3 +154,7 @@ def find_correct_guesses(latest_column, guess=None, feedback=None):
             if word != '' and _is_correct_guess(guess, feedback, word):
                 add_word_to_possible_guesses(word)
         return True
+
+
+def get_results_correct_guesses():
+    return get_word_list_by_num_letters(word_list_type='possible_guesses')

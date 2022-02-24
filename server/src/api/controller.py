@@ -49,4 +49,12 @@ def find_correct_guesses():
             wordle_util.find_correct_guesses(latest_column, latest_guess, latest_feedback)
         
         return jsonify({'message': 'done'}), RESP_OK
+    return jsonify({'error': 'bad request'}), RESP_BAD_REQUEST
 
+
+@app.route('/getResultsCorrectGuesses', methods=['GET'])
+def get_results_correct_guesses():
+    if request.method == 'GET':
+        word_list = wordle_util.get_results_correct_guesses()
+        return jsonify({'possible_guesses': word_list})
+    return jsonify({'error': 'bad request'}), RESP_BAD_REQUEST
