@@ -1,5 +1,5 @@
 import React from 'react'
-import { ReactComponent as Triangle } from '../../../../res/svg/triangle.svg'
+import { ReactComponent as Triangle } from '../../../../res/svg/triangle-accent.svg'
 
 const TableNavigation = () => {
   return (

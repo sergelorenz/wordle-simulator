@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 
 import PossibleWords from './PossibleWords/PossibleWords';
 
+import './StatisticsArea.scss';
+
 const StatisticsArea = () => {
   const figures = [
     {
