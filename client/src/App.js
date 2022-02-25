@@ -1,4 +1,5 @@
 import LetterGrid from './components/GameArea/LetterGrid/LetterGrid';
+import StatisticsArea from './components/GameArea/StatisticsArea/StatisticsArea';
 import KeyHandler from './components/KeyHandler/KeyHandler';
 
 import { Provider } from 'react-redux';
@@ -17,7 +18,7 @@ function App() {
           </div>
           <div className="game-area">
             <div><LetterGrid /></div>
-            <div></div>
+            <div><StatisticsArea /></div>
           </div>
         </div>
       </KeyHandler>
