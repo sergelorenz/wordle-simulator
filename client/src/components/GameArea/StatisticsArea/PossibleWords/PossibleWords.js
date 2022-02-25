@@ -2,9 +2,11 @@ import React from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
-import {ReactComponent as Triangle} from '../../../../res/svg/triangle.svg';
+import {ReactComponent as Triangle} from '../../../../res/svg/triangle-accent.svg';
 import TableNavigation from './TableNavigation';
 import { createBlankArray } from '../../../../utils/gridUtil';
+
+import './PossibleWords.scss';
 
 const PossibleWords = ({loading, possibleGuesses}) => {
   const reshapePossibleWordsList = () => {
@@ -45,8 +47,12 @@ const PossibleWords = ({loading, possibleGuesses}) => {
         <div className="possible-words-list">{renderPossibleWordsList()}</div>
         <hr />
         <div className="possible-words-options">
-          <label>HIDE POSSIBLE WORDS</label>
-          <Triangle />
+          <div className="hide-possible-words">
+            <label>Hide Possible Words</label>
+            <div>
+              <Triangle />
+            </div>
+          </div>
           <TableNavigation />
         </div>
         <hr />

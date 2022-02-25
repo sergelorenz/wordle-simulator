@@ -4,9 +4,9 @@
 .parent-letter-grid {
     display: flex;
     flex-direction: column;
+    padding-top: min-vw(30px);
 
     .options {
-        margin-top: min-vw(30px);
         display: flex;
         flex-direction: row;
         justify-content: center;
