@@ -9,5 +9,5 @@ export const SET_WORD_LIST = "SET_WORD_LIST";
 
 // for game statistics
 export const SET_POSSIBLE_GUESSES = "SET_POSSIBLE_GUESSES";
-export const START_LOADING = "SET_LOADING";
-export const STOP_LOADING = "START_LOADING";
+export const START_LOADING_GUESSES = "START_LOADING_GUESSES";
+export const STOP_LOADING_GUESSES = "STOP_LOADING_GUESSES";

@@ -1,9 +1,14 @@
 import React from 'react'
+import { connect } from 'react-redux';
 import { ReactComponent as Triangle } from '../../../../res/svg/triangle-accent.svg'
+import PropTypes from 'prop-types'
 
-const TableNavigation = () => {
+import Spinner from '../../../generic/Spinner/Spinner';
+
+const TableNavigation = ({loadingGuesses, loadingStats}) => {
   return (
     <div className="table-navigation">
+        {(loadingGuesses && loadingStats) && <Spinner />}
         <div className="jump-to-first">
             <Triangle />
             <Triangle />
@@ -26,4 +31,14 @@ const TableNavigation = () => {
   )
 }
 
-export default TableNavigation
+TableNavigation.propTypes = {
+    loadingGuesses: PropTypes.bool.isRequired,
+    loadingStats: PropTypes.bool.isRequired
+}
+
+const mapStateToProps = state => ({
+    loadingGuesses: state.gameStatistics.loadingGuesses,
+    loadingStats: state.gameStatistics.loadingStats
+})
+
+export default connect(mapStateToProps, {})(TableNavigation)

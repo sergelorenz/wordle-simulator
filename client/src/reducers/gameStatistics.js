@@ -1,49 +1,9 @@
-import { SET_POSSIBLE_GUESSES, START_LOADING, STOP_LOADING } from "../actions/types";
+import { SET_POSSIBLE_GUESSES, START_LOADING_GUESSES, STOP_LOADING_GUESSES } from "../actions/types";
 
 const initialState = {
-    possibleGuesses: [
-        'about',
-        'other',
-        'which',
-        'their',
-        'there',
-        'first',
-        'would',
-        'these',
-        'click',
-        'price',
-        'state',
-        'email',
-        'world',
-        'music',
-        'after',
-        'video',
-        'where',
-        'books',
-        'links',
-        'years',
-        'order',
-        'items',
-        'group',
-        'under',
-        'games',
-        'could',
-        'great',
-        'hotel',
-        'store',
-        'terms',
-        'right',
-        'local',
-        'those',
-        'using',
-        'phone',
-        'forum',
-        'based',
-        'black',
-        'check',
-        'index'
-    ],
-    loading: false
+    possibleGuesses: [],
+    loadingGuesses: false,
+    loadingStats: true,
 }
 
 // eslint-disable-next-line
@@ -54,17 +14,17 @@ export default function (state = initialState, action) {
         case SET_POSSIBLE_GUESSES:
             return {
                 ...state,
-                payload
+                possibleGuesses: payload
             }
-        case START_LOADING:
+        case START_LOADING_GUESSES:
             return {
                 ...state,
-                loading: true
+                loadingGuesses: true
             }
-        case STOP_LOADING:
+        case STOP_LOADING_GUESSES:
             return {
                 ...state,
-                loading: false
+                loadingGuesses: false
             }
         default:
             return state;
