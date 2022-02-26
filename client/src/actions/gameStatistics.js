@@ -1,4 +1,4 @@
-import { SET_POSSIBLE_GUESSES, START_LOADING } from "./types"
+import { SET_POSSIBLE_GUESSES, START_LOADING_GUESSES, STOP_LOADING_GUESSES } from "./types"
 
 export const setPossibleGuesses = possibleGuesses => dispatch => {
     dispatch({
@@ -7,16 +7,16 @@ export const setPossibleGuesses = possibleGuesses => dispatch => {
     })
 }
 
-export const startLoading = () => dispatch => {
+export const startLoadingGuesses = () => dispatch => {
     dispatch({
-        type: START_LOADING,
+        type: START_LOADING_GUESSES,
         payload: null
     })
 }
 
-export const stopLoading = () => dispatch => {
+export const stopLoadingGuesses = () => dispatch => {
     dispatch({
-        type: STOP_LOADING,
+        type: STOP_LOADING_GUESSES,
         payload: null
     })
 }

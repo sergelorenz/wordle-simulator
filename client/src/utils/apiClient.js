@@ -32,7 +32,7 @@ export const getWordListApi = async numLetters => {
     }
 }
 
-export const findCorrectGuesses = async (latestColumn, listGuesses, listFeedbacks) => {
+export const findCorrectGuessesApi = async (latestColumn, listGuesses, listFeedbacks) => {
     const url = BASE_URL + '/findCorrectGuesses';
     const body = {
         latest_column: latestColumn,
@@ -48,7 +48,7 @@ export const findCorrectGuesses = async (latestColumn, listGuesses, listFeedback
     }
 }
 
-export const getResultsCorrectGuesses = async () => {
+export const getResultsCorrectGuessesApi = async () => {
     const url = BASE_URL + '/getResultsCorrectGuesses';
     try {
         const res = await axios.get(url);
