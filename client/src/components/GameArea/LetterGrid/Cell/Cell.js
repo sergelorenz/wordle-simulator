@@ -65,10 +65,10 @@ const Cell = ({key, cellId, gridFeedback, gridLetters, activeCell}) => {
 }
 
 Cell.propTypes = {
-  key: PropTypes.number.isRequired,
+  key: PropTypes.number,
   cellId: PropTypes.string.isRequired,
   gridFeedback: PropTypes.array.isRequired,
-  gridLetter: PropTypes.array.isRequired,
+  gridLetter: PropTypes.array,
   activeCell: PropTypes.array.isRequired
 }
 

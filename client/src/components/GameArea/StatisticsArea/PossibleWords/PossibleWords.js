@@ -11,7 +11,7 @@ import { findCorrectGuessesApi, getResultsCorrectGuessesApi } from '../../../../
 
 import './PossibleWords.scss';
 
-const PossibleWords = ({ possibleGuesses, activeCell, gridLetters, feedbacks, setAlertTimed, setPossibleGuesses, startLoadingGuesses, stopLoadingGuesses, loadingGuesses, loadingStats }) => {
+const PossibleWords = ({ possibleGuesses, activeCell, gridLetters, feedbacks, setAlertTimed, setPossibleGuesses, startLoadingGuesses, stopLoadingGuesses, loadingGuesses, loadingStats, possibleGuessesCols, possibleGuessesRows, possibleGuessesPage }) => {
   useEffect(() => {
 
     async function findCorrectGuesses() {
@@ -38,9 +38,7 @@ const PossibleWords = ({ possibleGuesses, activeCell, gridLetters, feedbacks, se
           clearInterval(interval);
           setAlertTimed(err.message);
         }
-        console.log(loadingGuesses);
         if (!loadingGuesses) {
-          console.log(loadingGuesses);
           clearInterval(interval);
         }
       }, 2000)
@@ -52,21 +50,23 @@ const PossibleWords = ({ possibleGuesses, activeCell, gridLetters, feedbacks, se
 
 
   const reshapePossibleWordsList = () => {
-    const numColumns = 5;
-    const numRows = 8;
-    const reshapedArray = createBlankArray(numRows, numColumns, '');
+    const reshapedArray = createBlankArray(possibleGuessesRows, possibleGuessesCols, '');
+    const total = possibleGuessesCols * possibleGuessesRows;
+    const startRead = total * (possibleGuessesPage - 1)
+    const endRead = startRead + total;
+    const slicedGuesses = possibleGuesses.slice(startRead, endRead);
 
     let r = 0;
     let c = 0;
     let w = 0;
-    while (w < possibleGuesses.length) {
-      reshapedArray[r][c] = possibleGuesses[w];
+    while (w < slicedGuesses.length) {
+      reshapedArray[r][c] = slicedGuesses[w];
       r++;
-      if (r === numRows) {
+      if (r === possibleGuessesRows) {
         c++;
         r = 0;
       }
-      if (c === numColumns) {
+      if (c === possibleGuessesCols) {
         break;
       }
       w++;
@@ -107,13 +107,16 @@ const PossibleWords = ({ possibleGuesses, activeCell, gridLetters, feedbacks, se
 PossibleWords.propTypes = {
   possibleGuesses: PropTypes.array.isRequired,
   activeCell: PropTypes.array.isRequired,
-  listGuesses: PropTypes.array.isRequired,
+  listGuesses: PropTypes.array,
   loadingGuesses: PropTypes.bool.isRequired,
   feedbacks: PropTypes.array.isRequired,
   setAlertTimed: PropTypes.func.isRequired,
   startLoadingGuesses: PropTypes.func.isRequired,
   stopLoadingGuesses: PropTypes.func.isRequired,
-  setPossibleGuesses: PropTypes.func.isRequired
+  setPossibleGuesses: PropTypes.func.isRequired,
+  possibleGuessesCols: PropTypes.number.isRequired,
+  possibleGuessesRows: PropTypes.number.isRequired,
+  possibleGuessesPage: PropTypes.number.isRequired
 }
 
 const mapStateToProps = state => ({
@@ -121,7 +124,10 @@ const mapStateToProps = state => ({
   possibleGuesses: state.gameStatistics.possibleGuesses,
   activeCell: state.letterGrid.activeCell,
   gridLetters: state.letterGrid.gridCellLetters,
-  feedbacks: state.letterGrid.letterGridCellFeedback
+  feedbacks: state.letterGrid.letterGridCellFeedback,
+  possibleGuessesCols: state.gameStatistics.possibleGuessesCols,
+  possibleGuessesRows: state.gameStatistics.possibleGuessesRows,
+  possibleGuessesPage: state.gameStatistics.possibleGuessesPage
 })
 
 export default connect(mapStateToProps, {setAlertTimed, startLoadingGuesses, stopLoadingGuesses, setPossibleGuesses})(PossibleWords)
