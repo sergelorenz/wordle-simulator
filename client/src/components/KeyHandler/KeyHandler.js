@@ -6,35 +6,40 @@ import { isValidKeyPress, gradeWord, isInWordList } from "../../utils/gridUtil";
 
 import { triggerLetterInput, setAlertTimed, setGuessFeedback, triggerBackspace } from "../../actions/letterGrid";
 
-const KeyHandler = ({triggerLetterInput, triggerBackspace, setGuessFeedback, answer, setAlertTimed, gridCellLetters, activeCell, numLetterIndex, children, wordList}) => {
+const KeyHandler = ({triggerLetterInput, triggerBackspace, setGuessFeedback, answer, setAlertTimed, gridCellLetters, activeCell, numLetterIndex, children, wordList, pageNumberFocus}) => {
     useEffect(() => {
         function handleKeyDown(e) {
-            // letters
-            if (isValidKeyPress(e.keyCode)) {
-                triggerLetterInput(e.key.toUpperCase());
-            }
+            if (!pageNumberFocus) {
 
-            // enter key
-            if (e.keyCode === 13) {
-                const activeCol = activeCell[0];
-                const word = formWord(activeCol).toLowerCase();
-                if (isCompleteWord(word)) {
-                    if (isInWordList(wordList, word)) {
-                        const grade = gradeWord(word, answer.toLowerCase());
-                        setGuessFeedback(grade, activeCol);
-                    } else {
-                        setAlertTimed(`${word.toUpperCase()} is not a valid word.`)
-                    }
-
-                } else {
-                    setAlertTimed("That's an incomplete word.")
+                // letters
+                if (isValidKeyPress(e.keyCode)) {
+                    triggerLetterInput(e.key.toUpperCase());
                 }
-            }
 
-            // backspace key
-            if (e.keyCode === 8) {
-                triggerBackspace();
-            }
+                // enter key
+                if (e.keyCode === 13) {
+                    const activeCol = activeCell[0];
+                    const word = formWord(activeCol).toLowerCase();
+                    if (isCompleteWord(word)) {
+                        if (isInWordList(wordList, word)) {
+                            const grade = gradeWord(word, answer.toLowerCase());
+                            setGuessFeedback(grade, activeCol);
+                        } else {
+                            setAlertTimed(`${word.toUpperCase()} is not a valid word.`)
+                        }
+
+                    } else {
+                        setAlertTimed("That's an incomplete word.")
+                    }
+                }
+
+                // backspace key
+                if (e.keyCode === 8) {
+                    triggerBackspace();
+                }
+            } 
+
+
         }
 
         document.addEventListener('keydown', handleKeyDown);
@@ -42,7 +47,7 @@ const KeyHandler = ({triggerLetterInput, triggerBackspace, setGuessFeedback, ans
         return function cleanup() {
             document.removeEventListener('keydown', handleKeyDown);
         }
-    }, [activeCell, setGuessFeedback, answer, setAlertTimed, triggerLetterInput, children])
+    }, [activeCell, setGuessFeedback, answer, setAlertTimed, triggerLetterInput, children, pageNumberFocus])
 
     const formWord = activeCol => {
         const word = gridCellLetters[activeCol].join('').trim();
@@ -65,7 +70,8 @@ KeyHandler.propTypes = {
     numLetterIndex: PropTypes.number.isRequired,
     setGuessFeedback: PropTypes.func.isRequired,
     triggerBackspace: PropTypes.func.isRequired,
-    wordList: PropTypes.array.isRequired
+    wordList: PropTypes.array.isRequired,
+    pageNumberFocus: PropTypes.bool.isRequired
 }
 
 const mapStateToProps = state => ({
@@ -73,7 +79,8 @@ const mapStateToProps = state => ({
     activeCell: state.letterGrid.activeCell,
     numLetterIndex: state.letterGrid.numLetterIndex,
     answer: state.letterGrid.answer,
-    wordList: state.letterGrid.wordList
+    wordList: state.letterGrid.wordList,
+    pageNumberFocus: state.gameStatistics.pageNumberFocus
 })
 
 export default connect(mapStateToProps, {triggerLetterInput, setAlertTimed, setGuessFeedback, triggerBackspace})(KeyHandler);
