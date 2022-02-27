@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { ReactComponent as Triangle } from '../../../../res/svg/triangle-accent.svg'
 import PropTypes from 'prop-types'
 
+
+import { JUMP_TO_FIRST, JUMP_LEFT, JUMP_RIGHT, JUMP_TO_LAST } from '../../../../constants';
 import { setGuessesPage, setPageNumberFocus } from '../../../../actions/gameStatistics';
 import { setAlertTimed } from '../../../../actions/letterGrid';
 
@@ -13,7 +15,11 @@ const TableNavigation = ({
     loadingStats,
     setGuessesPage,
     setAlertTimed,
-    setPageNumberFocus
+    setPageNumberFocus,
+    possibleGuessesPage,
+    possibleGuessesRows,
+    possibleGuessesCols,
+    possibleGuesses
 }) => {
     const [page, setPage] = useState(1)
 
@@ -40,14 +46,50 @@ const TableNavigation = ({
         setPageNumberFocus(false);
     }
 
+    const getTotalPages = () => {
+        const totalPages = possibleGuesses.length;
+        return Math.floor(totalPages / (possibleGuessesCols * possibleGuessesRows)) + 1;
+    }
+
+    const handleNavigatePage = e => {
+        const className = e.currentTarget.getAttribute('class');
+        let currentPage = possibleGuessesPage;
+        const totalPages = getTotalPages();
+        switch (className) {
+            case JUMP_TO_FIRST:
+            default:
+                setGuessesPage(1);
+                setPage(1);
+                break;
+            case JUMP_LEFT:
+                currentPage--;
+                if (currentPage !== 0) {
+                    setGuessesPage(currentPage);
+                    setPage(currentPage);
+                } 
+                break;
+            case JUMP_RIGHT:
+                currentPage++;
+                if (currentPage <= totalPages) {
+                    setGuessesPage(currentPage);
+                    setPage(currentPage)
+                }
+                break;
+            case JUMP_TO_LAST:
+                setGuessesPage(totalPages);
+                setPage(totalPages);
+                break;
+        }
+    }
+
     return (
         <div className="table-navigation">
             {loadingGuesses && loadingStats && <Spinner />}
-            <div className="jump-to-first">
+            <div className="jump-to-first" onClick={handleNavigatePage}>
                 <Triangle />
                 <Triangle />
             </div>
-            <div className="jump-left">
+            <div className="jump-left" onClick={handleNavigatePage}>
                 <Triangle />
             </div>
             <div className="page-number">
@@ -59,12 +101,12 @@ const TableNavigation = ({
                     onFocus={handlePageNumberFocus}
                     onBlur={handlePageNumberBlur}
                 />
-                <span>of {500}</span>
+                <span>of {`${getTotalPages()}`}</span>
             </div>
-            <div className="jump-right">
+            <div className="jump-right" onClick={handleNavigatePage}>
                 <Triangle />
             </div>
-            <div className="jump-to-last">
+            <div className="jump-to-last" onClick={handleNavigatePage}>
                 <Triangle />
                 <Triangle />
             </div>
@@ -78,13 +120,21 @@ TableNavigation.propTypes = {
     possibleGuessesPage: PropTypes.number.isRequired,
     setGuessesPage: PropTypes.func.isRequired,
     setAlertTimed: PropTypes.func.isRequired,
-    setPageNumberFocus: PropTypes.func.isRequired
+    setPageNumberFocus: PropTypes.func.isRequired,
+    possibleGuesses: PropTypes.array,
+    possibleGuessesCols: PropTypes.number.isRequired,
+    possibleGuessesPage: PropTypes.number.isRequired,
+    possibleGuessesRows: PropTypes.number.isRequired
 };
 
 const mapStateToProps = state => ({
     loadingGuesses: state.gameStatistics.loadingGuesses,
     loadingStats: state.gameStatistics.loadingStats,
     possibleGuessesPage: state.gameStatistics.possibleGuessesPage,
+    possibleGuesses: state.gameStatistics.possibleGuesses,
+    possibleGuessesCols: state.gameStatistics.possibleGuessesCols,
+    possibleGuessesRows: state.gameStatistics.possibleGuessesRows,
+    possibleGuessesPage: state.gameStatistics.possibleGuessesPage
 });
 
 export default connect(mapStateToProps, {setGuessesPage, setAlertTimed, setPageNumberFocus})(TableNavigation)

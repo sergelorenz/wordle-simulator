@@ -21,7 +21,7 @@ export const stopLoadingGuesses = () => dispatch => {
     })
 }
 
-export const setGuessesRow = col => dispatch => {
+export const setGuessesCols = col => dispatch => {
     dispatch({
         type: SET_GUESSES_COLS,
         payload: col
