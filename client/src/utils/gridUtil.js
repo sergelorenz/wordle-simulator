@@ -37,7 +37,6 @@ const indexWithGrade = grade => {
         }
     }
     return hasGrade.reverse()
-
 }
 
 const gradeWordCorrect = (guess, answer, numLetters) => {
@@ -53,7 +52,7 @@ const gradeWordCorrect = (guess, answer, numLetters) => {
 const gradeWordPresent = (guess, answer, numLetters, grade) => {
     let hasGrade = indexWithGrade(grade);
     let listAnswer = [...answer];
-    hasGrade.forEach((_, index) => listAnswer.splice(index, index))
+    hasGrade.forEach((_, index) => listAnswer.splice(index, 1))
 
     let i = 0;
     while (i < numLetters) {
@@ -68,7 +67,7 @@ const gradeWordPresent = (guess, answer, numLetters, grade) => {
             continue; 
         } else {
             grade[i] = 'f_pr';
-            listAnswer.splice(answerIndex, answerIndex);
+            listAnswer.splice(answerIndex, 1);
             i++;
             continue;
         }

@@ -22,6 +22,7 @@ const LetterGrid = ({numLetterIndex, setNumLetters, setAnswer, setAlertTimed, se
         const chosenWord = response.data.chosen_word;
         setAnswer(chosenWord);
       } catch (err) {
+        console.log(err);
         setAlertTimed(err.message)
       }
     }
