@@ -5,104 +5,140 @@ import PropTypes from 'prop-types'
 import {ReactComponent as Triangle} from '../../../../res/svg/triangle-accent.svg';
 import TableNavigation from './TableNavigation';
 import { setAlertTimed } from '../../../../actions/letterGrid';
-import { startLoadingGuesses, stopLoadingGuesses, setPossibleGuesses } from '../../../../actions/gameStatistics';
-import { createBlankArray } from '../../../../utils/gridUtil';
-import { findCorrectGuessesApi, getResultsCorrectGuessesApi } from '../../../../utils/apiClient';
+import {
+    startLoadingGuesses,
+    stopLoadingGuesses,
+    setPossibleGuesses,
+    setGuessesPage,
+} from "../../../../actions/gameStatistics";
+import { createBlankArray } from "../../../../utils/gridUtil";
+import {
+    findCorrectGuessesApi,
+    getResultsCorrectGuessesApi,
+} from "../../../../utils/apiClient";
 
-import './PossibleWords.scss';
+import "./PossibleWords.scss";
 
-const PossibleWords = ({ possibleGuesses, activeCell, gridLetters, feedbacks, setAlertTimed, setPossibleGuesses, startLoadingGuesses, stopLoadingGuesses, loadingGuesses, loadingStats, possibleGuessesCols, possibleGuessesRows, possibleGuessesPage }) => {
-  useEffect(() => {
-
-    async function findCorrectGuesses() {
-      startLoadingGuesses();
-      const activeRow = activeCell[0];
-      // eslint-disable-next-line no-unused-vars
-      const response = await findCorrectGuessesApi(activeRow, gridLetters, feedbacks);
-      try {
-
-      } catch (err) {
-        setAlertTimed(err.message);
-      } finally {
-        stopLoadingGuesses();
-      }
-    }
-
-    function getResultsCorrectGuesses() {
-      let interval = setInterval(async () => {
-        const response = await getResultsCorrectGuessesApi();
-        try {
-          const possibleGuesses = response.data.possible_guesses;
-          setPossibleGuesses(possibleGuesses);
-        } catch (err) {
-          clearInterval(interval);
-          setAlertTimed(err.message);
+const PossibleWords = ({
+    possibleGuesses,
+    activeCell,
+    gridLetters,
+    feedbacks,
+    setAlertTimed,
+    setPossibleGuesses,
+    startLoadingGuesses,
+    stopLoadingGuesses,
+    loadingGuesses,
+    loadingStats,
+    possibleGuessesCols,
+    possibleGuessesRows,
+    possibleGuessesPage,
+    setGuessesPage,
+}) => {
+    useEffect(() => {
+        async function findCorrectGuesses() {
+            startLoadingGuesses();
+            const activeRow = activeCell[0];
+            // eslint-disable-next-line no-unused-vars
+            const response = await findCorrectGuessesApi(
+                activeRow,
+                gridLetters,
+                feedbacks
+            );
+            try {
+            } catch (err) {
+                setAlertTimed(err.message);
+            } finally {
+                stopLoadingGuesses();
+                setGuessesPage(1);
+            }
         }
-        if (!loadingGuesses) {
-          clearInterval(interval);
+
+        function getResultsCorrectGuesses() {
+            let interval = setInterval(async () => {
+                const response = await getResultsCorrectGuessesApi();
+                try {
+                    const possibleGuesses = response.data.possible_guesses;
+                    setPossibleGuesses(possibleGuesses);
+                } catch (err) {
+                    clearInterval(interval);
+                    setAlertTimed(err.message);
+                }
+                if (!loadingGuesses) {
+                    clearInterval(interval);
+                }
+            }, 2000);
         }
-      }, 2000)
-    }
 
-    findCorrectGuesses();
-    getResultsCorrectGuesses();
-  }, [feedbacks])
+        findCorrectGuesses();
+        getResultsCorrectGuesses();
+    }, [feedbacks]);
 
+    const reshapePossibleWordsList = () => {
+        const reshapedArray = createBlankArray(
+            possibleGuessesRows,
+            possibleGuessesCols,
+            ""
+        );
+        const total = possibleGuessesCols * possibleGuessesRows;
+        const startRead = total * (possibleGuessesPage - 1);
+        const endRead = startRead + total;
+        const slicedGuesses = possibleGuesses.slice(startRead, endRead);
 
-  const reshapePossibleWordsList = () => {
-    const reshapedArray = createBlankArray(possibleGuessesRows, possibleGuessesCols, '');
-    const total = possibleGuessesCols * possibleGuessesRows;
-    const startRead = total * (possibleGuessesPage - 1)
-    const endRead = startRead + total;
-    const slicedGuesses = possibleGuesses.slice(startRead, endRead);
+        let r = 0;
+        let c = 0;
+        let w = 0;
+        while (w < slicedGuesses.length) {
+            reshapedArray[r][c] = slicedGuesses[w];
+            r++;
+            if (r === possibleGuessesRows) {
+                c++;
+                r = 0;
+            }
+            if (c === possibleGuessesCols) {
+                break;
+            }
+            w++;
+        }
+        return reshapedArray;
+    };
 
-    let r = 0;
-    let c = 0;
-    let w = 0;
-    while (w < slicedGuesses.length) {
-      reshapedArray[r][c] = slicedGuesses[w];
-      r++;
-      if (r === possibleGuessesRows) {
-        c++;
-        r = 0;
-      }
-      if (c === possibleGuessesCols) {
-        break;
-      }
-      w++;
-    } 
-    return reshapedArray;
-  }
+    const renderPossibleWordsList = () => {
+        const wordArray = reshapePossibleWordsList();
+        return (
+            <table>
+                <tbody>
+                    {wordArray.map((row, i) => (
+                        <tr key={i}>
+                            {row.map((word, j) => (
+                                <td key={j}>{word}</td>
+                            ))}
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        );
+    };
 
-  const renderPossibleWordsList = () => {
-    const wordArray = reshapePossibleWordsList();
-    return <table>
-      <tbody>
-        {wordArray.map((row, i) => <tr key={i}>
-          {row.map((word, j) => <td key={j}>{word}</td>)}
-        </tr>)}
-      </tbody>
-
-    </table>
-  }
-
-  return (
-    <div className="possible-words">
-        <div className="possible-words-list">{renderPossibleWordsList()}</div>
-        <hr />
-        <div className="possible-words-options">
-          <div className="hide-possible-words">
-            <label>Hide Possible Words</label>
-            <div>
-              <Triangle />
+    return (
+        <div className="possible-words">
+            <div className="possible-words-list">
+                {renderPossibleWordsList()}
             </div>
-          </div>
-          <TableNavigation />
+            <hr />
+            <div className="possible-words-options">
+                <div className="hide-possible-words">
+                    <label>Hide Possible Words</label>
+                    <div>
+                        <Triangle />
+                    </div>
+                </div>
+                <TableNavigation />
+            </div>
+            <hr />
         </div>
-        <hr />
-    </div>
-  )
-}
+    );
+};
 
 PossibleWords.propTypes = {
   possibleGuesses: PropTypes.array.isRequired,
@@ -116,7 +152,8 @@ PossibleWords.propTypes = {
   setPossibleGuesses: PropTypes.func.isRequired,
   possibleGuessesCols: PropTypes.number.isRequired,
   possibleGuessesRows: PropTypes.number.isRequired,
-  possibleGuessesPage: PropTypes.number.isRequired
+  possibleGuessesPage: PropTypes.number.isRequired,
+  setGuessesPage: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
@@ -130,4 +167,4 @@ const mapStateToProps = state => ({
   possibleGuessesPage: state.gameStatistics.possibleGuessesPage
 })
 
-export default connect(mapStateToProps, {setAlertTimed, startLoadingGuesses, stopLoadingGuesses, setPossibleGuesses})(PossibleWords)
+export default connect(mapStateToProps, {setAlertTimed, startLoadingGuesses, stopLoadingGuesses, setPossibleGuesses, setGuessesPage})(PossibleWords)

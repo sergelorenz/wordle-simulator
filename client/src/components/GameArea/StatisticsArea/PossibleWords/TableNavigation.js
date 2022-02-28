@@ -128,7 +128,6 @@ TableNavigation.propTypes = {
     setPageNumberFocus: PropTypes.func.isRequired,
     possibleGuesses: PropTypes.array,
     possibleGuessesCols: PropTypes.number.isRequired,
-    possibleGuessesPage: PropTypes.number.isRequired,
     possibleGuessesRows: PropTypes.number.isRequired,
     numLetterIndex: PropTypes.number.isRequired
 };
@@ -140,7 +139,6 @@ const mapStateToProps = state => ({
     possibleGuesses: state.gameStatistics.possibleGuesses,
     possibleGuessesCols: state.gameStatistics.possibleGuessesCols,
     possibleGuessesRows: state.gameStatistics.possibleGuessesRows,
-    possibleGuessesPage: state.gameStatistics.possibleGuessesPage,
     numLetterIndex: state.letterGrid.numLetterIndex
 });
 
