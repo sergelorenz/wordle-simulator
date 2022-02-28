@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import { ReactComponent as Triangle } from '../../../../res/svg/triangle-accent.svg'
 import PropTypes from 'prop-types'
@@ -19,9 +19,14 @@ const TableNavigation = ({
     possibleGuessesPage,
     possibleGuessesRows,
     possibleGuessesCols,
-    possibleGuesses
+    possibleGuesses,
+    numLetterIndex,
 }) => {
     const [page, setPage] = useState(1)
+
+    useEffect(() => {
+        setPage(1);
+    }, [numLetterIndex])
 
     const handlePageNumberOnChange = e => {
         const val = e.target.value;
@@ -123,8 +128,8 @@ TableNavigation.propTypes = {
     setPageNumberFocus: PropTypes.func.isRequired,
     possibleGuesses: PropTypes.array,
     possibleGuessesCols: PropTypes.number.isRequired,
-    possibleGuessesPage: PropTypes.number.isRequired,
-    possibleGuessesRows: PropTypes.number.isRequired
+    possibleGuessesRows: PropTypes.number.isRequired,
+    numLetterIndex: PropTypes.number.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -134,7 +139,7 @@ const mapStateToProps = state => ({
     possibleGuesses: state.gameStatistics.possibleGuesses,
     possibleGuessesCols: state.gameStatistics.possibleGuessesCols,
     possibleGuessesRows: state.gameStatistics.possibleGuessesRows,
-    possibleGuessesPage: state.gameStatistics.possibleGuessesPage
+    numLetterIndex: state.letterGrid.numLetterIndex
 });
 
 export default connect(mapStateToProps, {setGuessesPage, setAlertTimed, setPageNumberFocus})(TableNavigation)

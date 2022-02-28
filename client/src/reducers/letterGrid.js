@@ -112,7 +112,7 @@ export default function (state = initialState, action) {
             }
         case SET_GUESS_FEEDBACK:
             const {gradeFeedback, activeCol} = payload
-            const updatedGridFeedback = state.letterGridCellFeedback;
+            const updatedGridFeedback = [...state.letterGridCellFeedback];
             updatedGridFeedback[activeCol] = gradeFeedback;
 
             const r = state.activeCell[0]

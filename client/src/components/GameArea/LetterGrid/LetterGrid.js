@@ -7,14 +7,14 @@ import Cell from './Cell/Cell';
 import Alert from './Alert';
 
 import { setNumLetters, setAnswer, setAlertTimed, setWordList } from '../../../actions/letterGrid';
-import { setGuessesCols } from '../../../actions/gameStatistics';
+import { setGuessesCols, setGuessesPage } from '../../../actions/gameStatistics';
 
 import { createInitialGrid } from '../../../utils/gridUtil';
 import { pickRandomWord, getWordListApi } from '../../../utils/apiClient';
 
 import './LetterGrid.scss';
 
-const LetterGrid = ({numLetterIndex, setNumLetters, setAnswer, setAlertTimed, setWordList, setGuessesCols}) => {
+const LetterGrid = ({numLetterIndex, setNumLetters, setAnswer, setAlertTimed, setWordList, setGuessesCols, setGuessesPage}) => {
   useEffect(() => {
     async function getRandomWord() {
       const response = await pickRandomWord(numLetterIndex + 5)
@@ -41,6 +41,7 @@ const LetterGrid = ({numLetterIndex, setNumLetters, setAnswer, setAlertTimed, se
     
     const newGuessesCols = gridInfo[`numLetter${indexToNumLetters(numLetterIndex)}`].numGuessesCols;
     setGuessesCols(newGuessesCols);
+    setGuessesPage(1);
   }, [numLetterIndex])
 
   const gameOptions = [
@@ -120,11 +121,12 @@ LetterGrid.propTypes = {
   setAnswer: PropTypes.func.isRequired,
   setAlertTimed: PropTypes.func.isRequired,
   setWordList: PropTypes.func.isRequired,
-  setGuessesCols: PropTypes.func.isRequired
+  setGuessesCols: PropTypes.func.isRequired,
+  setGuessesPage: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
   numLetterIndex: state.letterGrid.numLetterIndex,
 })
 
-export default connect(mapStateToProps, {setNumLetters, setAnswer, setAlertTimed, setWordList, setGuessesCols})(LetterGrid)
+export default connect(mapStateToProps, {setNumLetters, setAnswer, setAlertTimed, setWordList, setGuessesCols, setGuessesPage})(LetterGrid)
