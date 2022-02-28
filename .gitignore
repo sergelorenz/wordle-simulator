@@ -5,3 +5,6 @@ server/res/cache
 server/res/tmp/possible_guesses.txt
 !server/res/cache/README.md
 __pycache__/
+.idea
+.vscode
+server/.idea

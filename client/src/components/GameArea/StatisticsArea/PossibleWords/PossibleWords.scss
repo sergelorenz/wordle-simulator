@@ -1,0 +1,76 @@
+@import '../../../../sass/colors';
+@import '../../../../sass/functions';
+
+
+.possible-words {
+    
+    .possible-words-list {
+        margin-bottom: min-vw(10px);
+
+        table {
+            width: 100%;
+
+            td {
+                font-family: 'Courier New', Courier, monospace;
+                font-size: min-vw(28px);
+            }
+        }
+    }
+
+    .possible-words-options {
+        display: flex;
+        justify-content: space-between;
+        padding: min-vw(10px) 0px;
+
+        .hide-possible-words {
+            display: flex;
+            gap: min-vw(10px);
+            align-items: center;
+
+            label {
+                font-size: min-vw(20px); 
+            }
+
+            div {
+                cursor: pointer;
+            }
+
+        }
+
+        .table-navigation {
+            display: flex;
+            align-items: center;
+            gap: min-vw(14px);
+
+            .jump-to-first, .jump-left {
+                cursor: pointer;
+                svg {
+                    transform: rotate(-90deg);
+                }
+            }
+
+            .jump-to-last, .jump-right {
+                cursor: pointer;
+                svg {
+                    transform: rotate(90deg);
+                }
+            }
+
+            .page-number {
+                input {
+                    width: min-vw(50px);
+                    padding: 0px min-vw(4px);
+                    color: $dark;
+                    background-color: $light;
+                    height: min-vw(20px);
+                    font-size: min-vw(16px);
+                    border-radius: 4px;
+                    outline: none;
+                    border: none;
+                    margin-right: min-vw(8px);
+                }
+            }
+        }
+    }
+
+}

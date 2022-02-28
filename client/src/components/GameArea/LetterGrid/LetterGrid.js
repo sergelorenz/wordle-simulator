@@ -7,13 +7,14 @@ import Cell from './Cell/Cell';
 import Alert from './Alert';
 
 import { setNumLetters, setAnswer, setAlertTimed, setWordList } from '../../../actions/letterGrid';
+import { setGuessesCols, setGuessesPage } from '../../../actions/gameStatistics';
 
 import { createInitialGrid } from '../../../utils/gridUtil';
 import { pickRandomWord, getWordListApi } from '../../../utils/apiClient';
 
 import './LetterGrid.scss';
 
-const LetterGrid = ({numLetterIndex, setNumLetters, setAnswer, setAlertTimed, setWordList}) => {
+const LetterGrid = ({numLetterIndex, setNumLetters, setAnswer, setAlertTimed, setWordList, setGuessesCols, setGuessesPage}) => {
   useEffect(() => {
     async function getRandomWord() {
       const response = await pickRandomWord(numLetterIndex + 5)
@@ -21,6 +22,7 @@ const LetterGrid = ({numLetterIndex, setNumLetters, setAnswer, setAlertTimed, se
         const chosenWord = response.data.chosen_word;
         setAnswer(chosenWord);
       } catch (err) {
+        console.log(err);
         setAlertTimed(err.message)
       }
     }
@@ -37,6 +39,10 @@ const LetterGrid = ({numLetterIndex, setNumLetters, setAnswer, setAlertTimed, se
     
     getRandomWord();
     getWordList();
+    
+    const newGuessesCols = gridInfo[`numLetter${indexToNumLetters(numLetterIndex)}`].numGuessesCols;
+    setGuessesCols(newGuessesCols);
+    setGuessesPage(1);
   }, [numLetterIndex])
 
   const gameOptions = [
@@ -46,42 +52,44 @@ const LetterGrid = ({numLetterIndex, setNumLetters, setAnswer, setAlertTimed, se
     '8-Letter Words'
   ]
 
-  const gridStyle = {
-    fiveLetters: {
-      gridTemplateColumns: 'repeat(5, 76px)',
-      gridTemplateRows: 'repeat(6, 76px)',
-      fontSize: '50px'
+  const gridInfo = {
+    numLetter5: {
+      style: {
+        gridTemplateColumns: 'repeat(5, 76px)',
+        gridTemplateRows: 'repeat(6, 76px)',
+        fontSize: '50px'
+      },
+      numGuessesCols: 5
     },
-    sixLetters: {
-      gridTemplateColumns: 'repeat(6, 73px)',
-      gridTemplateRows: 'repeat(6, 73px)',
-      fontSize: '48px'
+    numLetter6: {
+      style: {
+        gridTemplateColumns: 'repeat(6, 73px)',
+        gridTemplateRows: 'repeat(6, 73px)',
+        fontSize: '48px'
+      },
+      numGuessesCols: 4
     },
-    sevenLetters: {
-      gridTemplateColumns: 'repeat(7, 70px)',
-      gridTemplateRows: 'repeat(6, 70px)',
-      fontSize: '46px'
+    numLetter7: {
+      style: {
+        gridTemplateColumns: 'repeat(7, 70px)',
+        gridTemplateRows: 'repeat(6, 70px)',
+        fontSize: '46px'
+      },
+      numGuessesCols: 4
     },
-    eightLetters: {
-      gridTemplateColumns: 'repeat(8, 68px)',
-      gridTemplateRows: 'repeat(6, 68px)',
-      fontSize: '44px'
+    numLetter8: {
+      style: {
+        gridTemplateColumns: 'repeat(8, 68px)',
+        gridTemplateRows: 'repeat(6, 68px)',
+        fontSize: '44px'
+      },
+      numGuessesCols: 3
     }
   }
 
   const getGridTemplate = () => {
     const numLetters = indexToNumLetters(numLetterIndex);
-    switch(numLetters) {
-      case 5:
-      default:
-        return gridStyle.fiveLetters;
-      case 6:
-        return gridStyle.sixLetters;
-      case 7:
-        return gridStyle.sevenLetters;
-      case 8:
-        return gridStyle.eightLetters;
-    }
+    return gridInfo[`numLetter${numLetters}`].style
   }
 
   const indexToNumLetters = index => {
@@ -113,11 +121,13 @@ LetterGrid.propTypes = {
   setNumLetters: PropTypes.func.isRequired,
   setAnswer: PropTypes.func.isRequired,
   setAlertTimed: PropTypes.func.isRequired,
-  setWordList: PropTypes.func.isRequired
+  setWordList: PropTypes.func.isRequired,
+  setGuessesCols: PropTypes.func.isRequired,
+  setGuessesPage: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
   numLetterIndex: state.letterGrid.numLetterIndex,
 })
 
-export default connect(mapStateToProps, {setNumLetters, setAnswer, setAlertTimed, setWordList})(LetterGrid)
+export default connect(mapStateToProps, {setNumLetters, setAnswer, setAlertTimed, setWordList, setGuessesCols, setGuessesPage})(LetterGrid)

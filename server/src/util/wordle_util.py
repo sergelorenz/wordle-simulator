@@ -28,7 +28,7 @@ def _has_cached_word(candidate_word, list_words):
 def select_randomly(list_words, cached_words, cached_words_path):
     chosen_word = random.choice(list_words)
     if chosen_word in cached_words:
-        return select_randomly(list_words, cached_words)
+        return select_randomly(list_words, cached_words, cached_words_path)
     
     _write_to_file(cached_words_path, chosen_word)
     return chosen_word
@@ -53,6 +53,8 @@ def pick_word(num_letters):
     cached_words = get_word_list_by_num_letters(num_letters, word_list_type='cache')
     list_words = get_word_list_by_num_letters(num_letters)[:FIRST_N_WORDS + 1]
 
+    cached_words_path = os.path.join(file_handler.to_abs_path(CACHE_DIR), f'cache_words_{num_letters}.txt')
+
     chosen_word = select_randomly(list_words, cached_words, cached_words_path)
     return chosen_word
 
@@ -67,7 +69,7 @@ def reset_possible_guesses(word_list):
     possible_guesses_path = file_handler.to_abs_path(POSSIBLE_GUESSES_PATH)
     remove_possible_guesses_if_exists()
     with open(possible_guesses_path, 'w') as x:
-        for word in word_list:
+        for word in sorted(word_list):
             x.write(f'{word}\n')
 
 
@@ -130,7 +132,9 @@ def _is_correct_guess_for_wrong(guess, feedback, char_word):
                 break
     return is_correct
 
+
 def _is_correct_guess(guess, feedback, word):
+    guess_word = ''.join(guess)
     is_correct, char_word = _is_correct_guess_for_correct(guess, feedback, word)
     if is_correct:
         is_correct, char_word = _is_correct_guess_for_present(guess, feedback, char_word)

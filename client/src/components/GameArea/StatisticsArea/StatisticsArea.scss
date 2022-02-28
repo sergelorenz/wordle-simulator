@@ -1,0 +1,44 @@
+@import '../../../sass/colors';
+@import '../../../sass/functions';
+
+
+.parent-statistics-area {
+    color: $accent;
+    padding-top: min-vw(30px);
+    padding-left: min-vw(28.5px);
+    padding-right: min-vw(28.5px);
+
+    .title {
+        font-weight: bold;
+        font-size: min-vw(28px);
+        text-align: center;
+        display: block;
+        margin-bottom: min-vw(28.5px);
+    }
+
+    & > hr {
+        margin-bottom: min-vw(10px);
+    }
+
+    hr {
+        border-color: $midtone;
+    }
+
+    .figures {
+        margin-top: min-vw(28.5px);
+
+        .figure {
+            margin-bottom: min-vw(8px);
+            font-size: min-vw(16px);
+            font-weight: bold;
+            
+            label {
+                display: inline-block;
+            }
+
+            span {
+                float: right;
+            }
+        }
+    }
+}

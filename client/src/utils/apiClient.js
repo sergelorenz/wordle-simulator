@@ -28,6 +28,32 @@ export const getWordListApi = async numLetters => {
         const res = await axios.get(url);
         return res;
     } catch (err) {
-        return err
+        return err;
+    }
+}
+
+export const findCorrectGuessesApi = async (latestColumn, listGuesses, listFeedbacks) => {
+    const url = BASE_URL + '/findCorrectGuesses';
+    const body = {
+        latest_column: latestColumn,
+        list_guesses: listGuesses,
+        list_feedbacks: listFeedbacks
+    }
+
+    try {
+        const res = await axios.post(url, body, CONFIG);
+        return res
+    } catch (err) {
+        return err;
+    }
+}
+
+export const getResultsCorrectGuessesApi = async () => {
+    const url = BASE_URL + '/getResultsCorrectGuesses';
+    try {
+        const res = await axios.get(url);
+        return res;
+    } catch (err) {
+        return err;
     }
 }
