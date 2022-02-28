@@ -19,9 +19,11 @@ const LetterGrid = ({numLetterIndex, setNumLetters, setAnswer, setAlertTimed, se
     async function getRandomWord() {
       const response = await pickRandomWord(numLetterIndex + 5)
       try {
-        const chosenWord = response.data.chosen_word;
+        // const chosenWord = response.data.chosen_word;
+        const chosenWord = 'americas';
         setAnswer(chosenWord);
       } catch (err) {
+        console.log(err);
         setAlertTimed(err.message)
       }
     }

@@ -132,7 +132,9 @@ def _is_correct_guess_for_wrong(guess, feedback, char_word):
                 break
     return is_correct
 
+
 def _is_correct_guess(guess, feedback, word):
+    guess_word = ''.join(guess)
     is_correct, char_word = _is_correct_guess_for_correct(guess, feedback, word)
     if is_correct:
         is_correct, char_word = _is_correct_guess_for_present(guess, feedback, char_word)
