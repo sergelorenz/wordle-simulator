@@ -105,12 +105,15 @@ def _is_correct_guess_for_correct(guess, feedback, word):
     return is_correct, word
 
 
-def _is_correct_guess_for_present(guess, feedback, char_word):
+def _is_correct_guess_for_present(guess, feedback, char_word, original_word):
     # for present feedback
     is_correct = True
     for i, f in enumerate(feedback):
         if f == 'f_pr': # correct guess
             try:
+                if guess[i] == original_word[i]:
+                    is_correct = False
+                    break
                 index = char_word.index(guess[i])
                 is_correct = True
                 del char_word[index]
@@ -134,10 +137,9 @@ def _is_correct_guess_for_wrong(guess, feedback, char_word):
 
 
 def _is_correct_guess(guess, feedback, word):
-    guess_word = ''.join(guess)
     is_correct, char_word = _is_correct_guess_for_correct(guess, feedback, word)
     if is_correct:
-        is_correct, char_word = _is_correct_guess_for_present(guess, feedback, char_word)
+        is_correct, char_word = _is_correct_guess_for_present(guess, feedback, char_word, word)
         if is_correct:
             is_correct = _is_correct_guess_for_wrong(guess, feedback, char_word)
     
