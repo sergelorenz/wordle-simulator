@@ -52,7 +52,7 @@ const gradeWordCorrect = (guess, answer, numLetters) => {
 const gradeWordPresent = (guess, answer, numLetters, grade) => {
     let hasGrade = indexWithGrade(grade);
     let listAnswer = [...answer];
-    hasGrade.forEach((_, index) => listAnswer.splice(index, 1))
+    hasGrade.forEach((index, _) => listAnswer.splice(index, 1))
 
     let i = 0;
     while (i < numLetters) {
