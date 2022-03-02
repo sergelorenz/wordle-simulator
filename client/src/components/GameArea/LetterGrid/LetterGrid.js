@@ -103,11 +103,15 @@ const LetterGrid = ({numLetterIndex, setNumLetters, setAnswer, setAlertTimed, se
     )
   }
 
+  const handleNewGameClick = e => {
+    setNumLetters(numLetterIndex);
+  }
+
   return (
     <div className="parent-letter-grid">
         <div className="options">
             <Selector handleClickOption={setNumLetters} listValues={gameOptions} width={'235px'} value={numLetterIndex}/>
-            <button>New Game</button>
+            <button onClick={handleNewGameClick}>New Game</button>
         </div>
         <div className="letter-grid" style={getGridTemplate()}>
           {renderGrid()}
