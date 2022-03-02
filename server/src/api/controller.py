@@ -1,4 +1,7 @@
+from json import dumps
+from urllib.parse import urlparse
 from flask import jsonify, request
+import requests
 from src import app
 
 from src.util import wordle_util
@@ -57,4 +60,28 @@ def get_results_correct_guesses():
     if request.method == 'GET':
         word_list = wordle_util.get_results_correct_guesses()
         return jsonify({'possible_guesses': word_list})
+    return jsonify({'error': 'bad request'}), RESP_BAD_REQUEST
+
+
+@app.route('/findStatistics', methods=['POST'])
+def find_statistics():
+    if request.method == 'POST':
+        response = {'message': 'ok'}
+        try:
+            headers = {'Content-Type':'application/json'}
+            parsed_url = urlparse(request.url)
+            url = f'{parsed_url.scheme}://{parsed_url.netloc}/findStatisticsTimeout'
+            requests.post(url=url, data=request.data, headers=headers, timeout=1)
+            return jsonify(response), RESP_OK
+        except requests.Timeout:
+            return jsonify(response), RESP_OK
+    return jsonify({'error': 'bad request'}), RESP_BAD_REQUEST
+
+
+@app.route('/findStatisticsTimeout', methods=['POST'])
+def find_statistics_timeout():
+    if request.method == 'POST':
+        data = request.get_json()
+        print(data)
+        return jsonify({'message': 'ok'})
     return jsonify({'error': 'bad request'}), RESP_BAD_REQUEST
