@@ -1,6 +1,8 @@
-import os, random
-from config import CACHE_DIR, WORD_LIST_DIR, FIRST_N_WORDS, POSSIBLE_GUESSES_PATH
+import os, random, json, time
+from config import CACHE_DIR, WORD_LIST_DIR, FIRST_N_WORDS, POSSIBLE_GUESSES_PATH, STATISTICS_PATH, STATISTICS_PREVIOUS_PATH
 from src.util import file_handler
+from src.util.wordle_grading import grade_word
+from src.util.stats_lock_handler as slh
 
 
 def _read_file(path):
@@ -12,6 +14,16 @@ def _write_to_file(path, new_word):
     open_mode = 'a' if os.path.exists(path) else 'w'
     with open(path, open_mode) as x:
         x.write(f'{new_word}\n')
+
+
+def _write_to_statistics(stats_path, stats_dict):
+    with open(stats_path, 'w') as j:
+        json.dump(stats_dict, j)
+
+
+def _read_statistics(stats_path):
+    with open(stats_path, 'w') as j:
+        return json.load(j)
 
 
 def _get_word_list(path):
@@ -164,3 +176,14 @@ def find_correct_guesses(latest_column, guess=None, feedback=None):
 
 def get_results_correct_guesses():
     return get_word_list_by_num_letters(word_list_type='possible_guesses')
+
+
+def run_statistics(possible_guesses, answer):
+    if not slh.is_locked():
+        slh.init_lock()
+
+        slh.done_lock()
+    else:
+        time.sleep(1)
+        run_statistics()
+
