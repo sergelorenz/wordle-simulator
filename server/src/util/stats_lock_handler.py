@@ -1,6 +1,6 @@
 import os, time
 from config import STATS_LOCK_PATH
-from src.file_handler import to_abs_path
+from src.util.file_handler import to_abs_path
 
 LOCK_PATH = to_abs_path(STATS_LOCK_PATH)
 

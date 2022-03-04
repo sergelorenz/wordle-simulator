@@ -1,8 +1,8 @@
-import os, random, json, time
+import os, random, json, time, statistics
 from config import CACHE_DIR, WORD_LIST_DIR, FIRST_N_WORDS, POSSIBLE_GUESSES_PATH, STATISTICS_PATH, STATISTICS_PREVIOUS_PATH
 from src.util import file_handler
 from src.util.wordle_grading import grade_word
-from src.util.stats_lock_handler as slh
+import src.util.stats_lock_handler as slh
 
 
 def _read_file(path):
@@ -22,8 +22,13 @@ def _write_to_statistics(stats_path, stats_dict):
 
 
 def _read_statistics(stats_path):
-    with open(stats_path, 'w') as j:
+    with open(stats_path, 'r') as j:
         return json.load(j)
+
+
+def get_statistics():
+    current = file_handler.to_abs_path(STATISTICS_PATH)
+    return _read_statistics(current)
 
 
 def _get_word_list(path):
@@ -47,6 +52,7 @@ def select_randomly(list_words, cached_words, cached_words_path):
 
 
 def get_word_list_by_num_letters(num_letters=None, word_list_type='main'):
+    full_path = None
     if word_list_type == 'main':
         word_list_dir = WORD_LIST_DIR
         file_name = f'word_list-{num_letters}.txt'
@@ -103,7 +109,7 @@ def _is_correct_guess_for_correct(guess, feedback, word):
     is_correct = True
     index_to_clear = []
     for i, f in enumerate(feedback):
-        if f == 'f_co': # correct guess
+        if f == 'f_co':  # correct guess
             if guess[i] == word[i]:
                 is_correct = True
                 index_to_clear.append(i)
@@ -121,7 +127,7 @@ def _is_correct_guess_for_present(guess, feedback, char_word, original_word):
     # for present feedback
     is_correct = True
     for i, f in enumerate(feedback):
-        if f == 'f_pr': # correct guess
+        if f == 'f_pr':  # correct guess
             try:
                 if guess[i] == original_word[i]:
                     is_correct = False
@@ -160,7 +166,7 @@ def _is_correct_guess(guess, feedback, word):
 
 def find_correct_guesses(latest_column, guess=None, feedback=None):
     num_letters = len(guess)
-    if latest_column == -1: # first guess
+    if latest_column == -1:  # first guess
         word_list = get_word_list_by_num_letters(num_letters)
         reset_possible_guesses(word_list)
         return True
@@ -178,12 +184,97 @@ def get_results_correct_guesses():
     return get_word_list_by_num_letters(word_list_type='possible_guesses')
 
 
-def run_statistics(possible_guesses, answer):
+def find_correct_guesses_direct(previous_guesses, guess, feedback):
+    guess = [s.lower() for s in guess]
+    new_possible_guesses = []
+    for word in previous_guesses:
+        if _is_correct_guess(guess, feedback, word):
+            new_possible_guesses.append(word)
+
+    return new_possible_guesses
+
+
+def reset_stats(path):
+    stats_dict = {
+        "possible_guesses": 0,
+        "efficiency_guess": 0,
+        "max_efficiency_next_guess": 0,
+        "min_efficiency_next_guess": 0,
+        "ave_efficiency_next_guess": 0
+    }
+    _write_to_statistics(path, stats_dict)
+
+
+def transfer_current_stats_to_previous():
+    current = file_handler.to_abs_path(STATISTICS_PATH)
+    previous = file_handler.to_abs_path(STATISTICS_PREVIOUS_PATH)
+
+    stats_dict = _read_statistics(current)
+    reset_stats(previous)
+    _write_to_statistics(previous, stats_dict)
+    return stats_dict
+
+
+def all_correct(feedback):
+    for f in feedback:
+        if f != 'f_co':
+            return False
+    return True
+
+
+def on_next_guess(possible_guesses, answer):
+    possible_guesses_next_guesses = []
+    for word in possible_guesses:
+        feedback = grade_word(word, answer)
+        if all_correct(feedback):
+            possible_guesses_next_guesses.append(0)
+            continue
+        number_possible_guesses = len(find_correct_guesses_direct(possible_guesses, word, feedback))
+        possible_guesses_next_guesses.append(number_possible_guesses)
+    
+    return possible_guesses_next_guesses
+
+
+def _calc_efficiency(old_val, new_val):
+    return "{:.3f}%".format(100 * (old_val - new_val) / old_val)
+
+
+def second_min(list_vals):
+    vals = sorted(list_vals)
+    return vals[1] if len(vals) >= 2 else vals[0]
+
+
+def run_statistics(possible_guesses, answer, latest_row):
     if not slh.is_locked():
         slh.init_lock()
+        num_guesses = len(possible_guesses)
+        next_possible_guesses = on_next_guess(possible_guesses, answer)
+        min_num_guesses = second_min(next_possible_guesses)
+        max_num_guesses = max(next_possible_guesses)
+        ave_num_guesses = statistics.mean(next_possible_guesses)
 
+        max_efficiency = _calc_efficiency(num_guesses, min_num_guesses)
+        min_efficiency = _calc_efficiency(num_guesses, max_num_guesses)
+        ave_efficiency = _calc_efficiency(num_guesses, ave_num_guesses)
+
+        stats_dict = {
+            "possible_guesses": f'{num_guesses}',
+            "max_efficiency_next_guess": max_efficiency,
+            "min_efficiency_next_guess": min_efficiency,
+            "ave_efficiency_next_guess": ave_efficiency
+        }
+        current = file_handler.to_abs_path(STATISTICS_PATH)
+
+        if latest_row == -1:  # first guess
+            stats_dict["efficiency_guess"] = "-"
+            _write_to_statistics(current, stats_dict)
+        else:
+            previous_stats_dict = transfer_current_stats_to_previous()
+            previous_num_guesses = int(previous_stats_dict["possible_guesses"])
+            current_efficiency = _calc_efficiency(previous_num_guesses, num_guesses)
+            stats_dict["efficiency_guess"] = current_efficiency
+            _write_to_statistics(current, stats_dict)
         slh.done_lock()
     else:
         time.sleep(1)
-        run_statistics()
-
+        run_statistics(possible_guesses, answer, latest_row)
