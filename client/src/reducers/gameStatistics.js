@@ -3,7 +3,7 @@ import { SET_POSSIBLE_GUESSES, SET_GUESSES_COLS, SET_GUESSES_PAGE, START_LOADING
 const initialState = {
     possibleGuesses: [],
     loadingGuesses: false,
-    loadingStats: true,
+    loadingStats: false,
     possibleGuessesCols: 5,
     possibleGuessesRows: 8,
     possibleGuessesPage: 1,
