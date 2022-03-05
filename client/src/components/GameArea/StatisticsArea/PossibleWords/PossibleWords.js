@@ -29,7 +29,6 @@ const PossibleWords = ({
     startLoadingGuesses,
     stopLoadingGuesses,
     loadingGuesses,
-    loadingStats,
     possibleGuessesCols,
     possibleGuessesRows,
     possibleGuessesPage,

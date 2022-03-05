@@ -36,8 +36,12 @@
                 display: inline-block;
             }
 
-            span {
+            span, .spinner {
                 float: right;
+            }
+
+            .spinner {
+                width: min-vw(16px);
             }
         }
     }

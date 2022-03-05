@@ -12,7 +12,6 @@ import Spinner from '../../../generic/Spinner/Spinner';
 
 const TableNavigation = ({
     loadingGuesses,
-    loadingStats,
     setGuessesPage,
     setAlertTimed,
     setPageNumberFocus,
@@ -89,7 +88,7 @@ const TableNavigation = ({
 
     return (
         <div className="table-navigation">
-            {loadingGuesses && loadingStats && <Spinner />}
+            {loadingGuesses && <Spinner />}
             <div className="jump-to-first" onClick={handleNavigatePage}>
                 <Triangle />
                 <Triangle />
@@ -121,7 +120,6 @@ const TableNavigation = ({
 
 TableNavigation.propTypes = {
     loadingGuesses: PropTypes.bool.isRequired,
-    loadingStats: PropTypes.bool.isRequired,
     possibleGuessesPage: PropTypes.number.isRequired,
     setGuessesPage: PropTypes.func.isRequired,
     setAlertTimed: PropTypes.func.isRequired,
@@ -134,7 +132,6 @@ TableNavigation.propTypes = {
 
 const mapStateToProps = state => ({
     loadingGuesses: state.gameStatistics.loadingGuesses,
-    loadingStats: state.gameStatistics.loadingStats,
     possibleGuessesPage: state.gameStatistics.possibleGuessesPage,
     possibleGuesses: state.gameStatistics.possibleGuesses,
     possibleGuessesCols: state.gameStatistics.possibleGuessesCols,
