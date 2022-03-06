@@ -8,40 +8,19 @@ import "./StatisticsArea.scss";
 
 import Spinner from "../../generic/Spinner/Spinner";
 
-const StatisticsArea = loadingStats => {
-    const figures = [
-        {
-            name: "TOTAL POSSIBLE WORDS",
-            value: 16353,
-        },
-        {
-            name: "EFFICIENCY OF PREVIOUS GUESS",
-            value: "95.25%",
-        },
-        {
-            name: "MAX EFFICIENCY OF NEXT GUESS",
-            value: "60.34%",
-        },
-        {
-            name: "MIN EFFICIENCY OF NEXT GUESS",
-            value: "30.24%",
-        },
-        {
-            name: "AVERAGE EFFICIENCY OF NEXT GUESS",
-            value: "42.21%",
-        },
-    ];
-
+const StatisticsArea = ({loadingStats, statisticsFigures}) => {
     const renderFigures = () => {
-        return figures.map((figure, i) => (
-          <div className="figure" key={i}>
-            <label>{figure.name}</label>
-            {loadingStats === true ? <Spinner /> : <span>{figure.value}</span>}
-          </div>
-        )
-
-        );
-    };
+        const figureComponents = []
+        let i = 0;
+        for (const stat in statisticsFigures) {
+            figureComponents.push(<div className="figure" key={i}>
+                <label>{statisticsFigures[stat].name}</label>
+                {loadingStats === true ? <Spinner /> : <span>{statisticsFigures[stat].value}</span>}
+            </div>);
+            i++;
+        }
+        return figureComponents
+    }
 
     return (
         <div className="parent-statistics-area">
@@ -56,10 +35,12 @@ const StatisticsArea = loadingStats => {
 
 StatisticsArea.propTypes = {
     loadingStats: PropTypes.bool.isRequired,
+    statisticsFigures: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
     loadingStats: state.gameStatistics.loadingStats,
+    statisticsFigures: state.gameStatistics.statisticsFigures
 });
 
 export default connect(mapStateToProps, {})(StatisticsArea);

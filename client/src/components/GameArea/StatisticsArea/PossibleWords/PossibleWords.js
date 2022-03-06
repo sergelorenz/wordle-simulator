@@ -48,8 +48,10 @@ const PossibleWords = ({
             } catch (err) {
                 setAlertTimed(err.message);
             } finally {
-                stopLoadingGuesses();
-                setGuessesPage(1);
+                setTimeout(() => {
+                    stopLoadingGuesses();
+                    setGuessesPage(1);
+                }, 2000)
             }
         }
 

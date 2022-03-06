@@ -7,7 +7,29 @@ const initialState = {
     possibleGuessesCols: 5,
     possibleGuessesRows: 8,
     possibleGuessesPage: 1,
-    pageNumberFocus: false
+    pageNumberFocus: false,
+    statisticsFigures: {
+        possible_guesses: {
+            name: "TOTAL POSSIBLE WORDS",
+            value: "0"
+        },
+        efficiency_guess: {
+            name: "EFFICIENCY OF PREVIOUS GUESS",
+            value: "-"
+        },
+        max_efficiency_next_guess: {
+            name: "MAX EFFICIENCY OF NEXT GUESS",
+            value: "0"
+        },
+        min_efficiency_next_guess: {
+            name: "min EFFICIENCY OF NEXT GUESS",
+            value: "0"
+        },
+        ave_efficiency_next_guess: {
+            name: "AVERAGE EFFICIENCY OF NEXT GUESS",
+            value: "0"
+        }
+    }
 }
 
 // eslint-disable-next-line
