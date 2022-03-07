@@ -1,12 +1,10 @@
 import traceback
-from urllib.parse import urlparse
 from flask import jsonify, request
 import requests
 from src import app
 
 from src.util import wordle_util
-import src.util.stats_lock_handler as slh
-from config import RESP_OK, RESP_BAD_REQUEST, RESP_LOCKED
+from config import RESP_OK, RESP_BAD_REQUEST
 
 
 @app.route('/')
@@ -61,45 +59,3 @@ def get_results_correct_guesses():
         word_list = wordle_util.get_results_correct_guesses()
         return jsonify({'possible_guesses': word_list})
     return jsonify({'error': 'bad request'}), RESP_BAD_REQUEST
-
-
-@app.route('/findStatistics', methods=['POST'])
-def find_statistics():
-    if request.method == 'POST':
-        response = {'message': 'ok'}
-        try:
-            headers = {'Content-Type': 'application/json'}
-            parsed_url = urlparse(request.url)
-            url = f'{parsed_url.scheme}://{parsed_url.netloc}/findStatisticsTimeout'
-            requests.post(url=url, data=request.data, headers=headers, timeout=1)
-            return jsonify(response), RESP_OK
-        except requests.Timeout:
-            return jsonify(response), RESP_OK
-    return jsonify({'error': 'bad request'}), RESP_BAD_REQUEST
-
-
-@app.route('/findStatisticsTimeout', methods=['POST'])
-def find_statistics_timeout():
-    if request.method == 'POST':
-        try:
-            data = request.get_json()
-            possible_guesses = data['possible_guesses']
-            answer = data['answer']
-            active_row = int(data['active_row']) - 1
-            print(len(possible_guesses), answer, active_row)
-            wordle_util.run_statistics(possible_guesses, answer, active_row)
-        except Exception as e:
-            print(str(e))
-            print(traceback.format_exc())
-        return jsonify({'message': 'ok'})
-    return jsonify({'error': 'bad request'}), RESP_BAD_REQUEST
-
-
-@app.route('/getResultsStatistics', methods=['GET'])
-def get_results_statistics():
-    if request.method == 'GET':
-        if slh.is_locked():
-            return jsonify({'message': 'locked'}), RESP_LOCKED
-        else:
-            stats = wordle_util.get_statistics()
-            return jsonify(stats), RESP_OK

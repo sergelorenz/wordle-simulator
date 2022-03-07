@@ -23,26 +23,4 @@
     hr {
         border-color: $midtone;
     }
-
-    .figures {
-        margin-top: min-vw(28.5px);
-
-        .figure {
-            margin-bottom: min-vw(8px);
-            font-size: min-vw(16px);
-            font-weight: bold;
-            
-            label {
-                display: inline-block;
-            }
-
-            span, .spinner {
-                float: right;
-            }
-
-            .spinner {
-                width: min-vw(16px);
-            }
-        }
-    }
 }

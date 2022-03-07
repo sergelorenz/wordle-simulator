@@ -10,32 +10,23 @@ import {
     stopLoadingGuesses,
     setPossibleGuesses,
     setGuessesPage,
-    startLoadingStats,
-    stopLoadingStats,
-    setStatsFigures,
 } from "../../../../actions/gameStatistics";
 import { createBlankArray } from "../../../../utils/gridUtil";
 import {
     findCorrectGuessesApi,
     getResultsCorrectGuessesApi,
-    findStatisticsApi,
-    getResultStatisticsApi,
 } from "../../../../utils/apiClient";
 
 import "./PossibleWords.scss";
 
 const PossibleWords = ({
     possibleGuesses,
-    answer,
     activeCell,
     gridLetters,
     feedbacks,
     setAlertTimed,
     setPossibleGuesses,
     startLoadingGuesses,
-    startLoadingStats,
-    stopLoadingStats,
-    setStatsFigures,
     stopLoadingGuesses,
     loadingGuesses,
     possibleGuessesCols,
@@ -44,32 +35,6 @@ const PossibleWords = ({
     setGuessesPage,
 }) => {
     useEffect(() => {
-        async function getStatistics() {
-            let interval = setInterval(async () => {
-                const response = await getResultStatisticsApi();
-                try {
-                    if (response.status === 200) {
-                        clearInterval(interval);
-                        setStatsFigures(response.data);
-                        stopLoadingStats();
-                    }
-                } catch (err) {
-                    clearInterval(interval);
-                    setAlertTimed(err.message);
-                }
-            }, 2000)
-        }
-
-        async function startFindStatistics(newPossibleGuesses, currentAnswer, activeRow) {
-            startLoadingStats();
-            const response = await findStatisticsApi(newPossibleGuesses, currentAnswer, activeRow);
-            try {
-                getStatistics();
-            } catch (err) {
-                setAlertTimed(err.message);
-            }
-        }
-
         async function findCorrectGuesses() {
             startLoadingGuesses();
             const activeRow = activeCell[0];
@@ -91,10 +56,8 @@ const PossibleWords = ({
         }
 
         function getResultsCorrectGuesses() {
-            let currentAnswer = answer;
-            console.log(currentAnswer);
-            let activeRow = activeCell[0];
             let interval = setInterval(async () => {
+                console.log('Still loading!')
                 const response = await getResultsCorrectGuessesApi();
                 let newPossibleGuesses;
                 try {
@@ -105,8 +68,8 @@ const PossibleWords = ({
                     setAlertTimed(err.message);
                 }
                 if (!loadingGuesses) {
+                    console.log('NO longer loading!')
                     clearInterval(interval);
-                    startFindStatistics(newPossibleGuesses, currentAnswer, activeRow);
                 }
             }, 2000);
         }
@@ -195,10 +158,6 @@ PossibleWords.propTypes = {
     possibleGuessesRows: PropTypes.number.isRequired,
     possibleGuessesPage: PropTypes.number.isRequired,
     setGuessesPage: PropTypes.func.isRequired,
-    startLoadingStats: PropTypes.func.isRequired,
-    stopLoadingStats: PropTypes.func.isRequired,
-    setStatsFigures: PropTypes.func.isRequired,
-    answser: PropTypes.string
 };
 
 const mapStateToProps = state => ({
@@ -210,7 +169,6 @@ const mapStateToProps = state => ({
     possibleGuessesCols: state.gameStatistics.possibleGuessesCols,
     possibleGuessesRows: state.gameStatistics.possibleGuessesRows,
     possibleGuessesPage: state.gameStatistics.possibleGuessesPage,
-    answer: state.letterGrid.answer
 });
 
 export default connect(mapStateToProps, {
@@ -219,7 +177,4 @@ export default connect(mapStateToProps, {
     stopLoadingGuesses,
     setPossibleGuesses,
     setGuessesPage,
-    startLoadingStats,
-    stopLoadingStats,
-    setStatsFigures,
 })(PossibleWords);
