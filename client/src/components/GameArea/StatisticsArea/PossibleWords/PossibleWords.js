@@ -10,23 +10,32 @@ import {
     stopLoadingGuesses,
     setPossibleGuesses,
     setGuessesPage,
+    startLoadingStats,
+    stopLoadingStats,
+    setStatsFigures,
 } from "../../../../actions/gameStatistics";
 import { createBlankArray } from "../../../../utils/gridUtil";
 import {
     findCorrectGuessesApi,
     getResultsCorrectGuessesApi,
+    findStatisticsApi,
+    getResultStatisticsApi,
 } from "../../../../utils/apiClient";
 
 import "./PossibleWords.scss";
 
 const PossibleWords = ({
     possibleGuesses,
+    answer,
     activeCell,
     gridLetters,
     feedbacks,
     setAlertTimed,
     setPossibleGuesses,
     startLoadingGuesses,
+    startLoadingStats,
+    stopLoadingStats,
+    setStatsFigures,
     stopLoadingGuesses,
     loadingGuesses,
     possibleGuessesCols,
@@ -35,6 +44,32 @@ const PossibleWords = ({
     setGuessesPage,
 }) => {
     useEffect(() => {
+        async function getStatistics() {
+            let interval = setInterval(async () => {
+                const response = await getResultStatisticsApi();
+                try {
+                    if (response.status === 200) {
+                        clearInterval(interval);
+                        setStatsFigures(response.data);
+                        stopLoadingStats();
+                    }
+                } catch (err) {
+                    clearInterval(interval);
+                    setAlertTimed(err.message);
+                }
+            }, 2000)
+        }
+
+        async function startFindStatistics(newPossibleGuesses, currentAnswer, activeRow) {
+            startLoadingStats();
+            const response = await findStatisticsApi(newPossibleGuesses, currentAnswer, activeRow);
+            try {
+                getStatistics();
+            } catch (err) {
+                setAlertTimed(err.message);
+            }
+        }
+
         async function findCorrectGuesses() {
             startLoadingGuesses();
             const activeRow = activeCell[0];
@@ -51,22 +86,27 @@ const PossibleWords = ({
                 setTimeout(() => {
                     stopLoadingGuesses();
                     setGuessesPage(1);
-                }, 2000)
+                }, 2000);
             }
         }
 
         function getResultsCorrectGuesses() {
+            let currentAnswer = answer;
+            console.log(currentAnswer);
+            let activeRow = activeCell[0];
             let interval = setInterval(async () => {
                 const response = await getResultsCorrectGuessesApi();
+                let newPossibleGuesses;
                 try {
-                    const possibleGuesses = response.data.possible_guesses;
-                    setPossibleGuesses(possibleGuesses);
+                    newPossibleGuesses = response.data.possible_guesses;
+                    setPossibleGuesses(newPossibleGuesses);
                 } catch (err) {
                     clearInterval(interval);
                     setAlertTimed(err.message);
                 }
                 if (!loadingGuesses) {
                     clearInterval(interval);
+                    startFindStatistics(newPossibleGuesses, currentAnswer, activeRow);
                 }
             }, 2000);
         }
@@ -142,30 +182,44 @@ const PossibleWords = ({
 };
 
 PossibleWords.propTypes = {
-  possibleGuesses: PropTypes.array.isRequired,
-  activeCell: PropTypes.array.isRequired,
-  listGuesses: PropTypes.array,
-  loadingGuesses: PropTypes.bool.isRequired,
-  feedbacks: PropTypes.array.isRequired,
-  setAlertTimed: PropTypes.func.isRequired,
-  startLoadingGuesses: PropTypes.func.isRequired,
-  stopLoadingGuesses: PropTypes.func.isRequired,
-  setPossibleGuesses: PropTypes.func.isRequired,
-  possibleGuessesCols: PropTypes.number.isRequired,
-  possibleGuessesRows: PropTypes.number.isRequired,
-  possibleGuessesPage: PropTypes.number.isRequired,
-  setGuessesPage: PropTypes.func.isRequired
-}
+    possibleGuesses: PropTypes.array.isRequired,
+    activeCell: PropTypes.array.isRequired,
+    listGuesses: PropTypes.array,
+    loadingGuesses: PropTypes.bool.isRequired,
+    feedbacks: PropTypes.array.isRequired,
+    setAlertTimed: PropTypes.func.isRequired,
+    startLoadingGuesses: PropTypes.func.isRequired,
+    stopLoadingGuesses: PropTypes.func.isRequired,
+    setPossibleGuesses: PropTypes.func.isRequired,
+    possibleGuessesCols: PropTypes.number.isRequired,
+    possibleGuessesRows: PropTypes.number.isRequired,
+    possibleGuessesPage: PropTypes.number.isRequired,
+    setGuessesPage: PropTypes.func.isRequired,
+    startLoadingStats: PropTypes.func.isRequired,
+    stopLoadingStats: PropTypes.func.isRequired,
+    setStatsFigures: PropTypes.func.isRequired,
+    answser: PropTypes.string
+};
 
 const mapStateToProps = state => ({
-  loadingGuesses: state.gameStatistics.loadingGuesses,
-  possibleGuesses: state.gameStatistics.possibleGuesses,
-  activeCell: state.letterGrid.activeCell,
-  gridLetters: state.letterGrid.gridCellLetters,
-  feedbacks: state.letterGrid.letterGridCellFeedback,
-  possibleGuessesCols: state.gameStatistics.possibleGuessesCols,
-  possibleGuessesRows: state.gameStatistics.possibleGuessesRows,
-  possibleGuessesPage: state.gameStatistics.possibleGuessesPage
-})
+    loadingGuesses: state.gameStatistics.loadingGuesses,
+    possibleGuesses: state.gameStatistics.possibleGuesses,
+    activeCell: state.letterGrid.activeCell,
+    gridLetters: state.letterGrid.gridCellLetters,
+    feedbacks: state.letterGrid.letterGridCellFeedback,
+    possibleGuessesCols: state.gameStatistics.possibleGuessesCols,
+    possibleGuessesRows: state.gameStatistics.possibleGuessesRows,
+    possibleGuessesPage: state.gameStatistics.possibleGuessesPage,
+    answer: state.letterGrid.answer
+});
 
-export default connect(mapStateToProps, {setAlertTimed, startLoadingGuesses, stopLoadingGuesses, setPossibleGuesses, setGuessesPage})(PossibleWords)
+export default connect(mapStateToProps, {
+    setAlertTimed,
+    startLoadingGuesses,
+    stopLoadingGuesses,
+    setPossibleGuesses,
+    setGuessesPage,
+    startLoadingStats,
+    stopLoadingStats,
+    setStatsFigures,
+})(PossibleWords);

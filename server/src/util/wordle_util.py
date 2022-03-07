@@ -224,13 +224,14 @@ def all_correct(feedback):
 
 def on_next_guess(possible_guesses, answer):
     possible_guesses_next_guesses = []
-    for word in possible_guesses:
+    for i, word in enumerate(possible_guesses):
         feedback = grade_word(word, answer)
         if all_correct(feedback):
             possible_guesses_next_guesses.append(0)
             continue
         number_possible_guesses = len(find_correct_guesses_direct(possible_guesses, word, feedback))
         possible_guesses_next_guesses.append(number_possible_guesses)
+        print(f'Done Analyzing word: {i + 1} of {len(possible_guesses)}')
     
     return possible_guesses_next_guesses
 

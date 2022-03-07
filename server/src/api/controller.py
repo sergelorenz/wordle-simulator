@@ -81,15 +81,16 @@ def find_statistics():
 @app.route('/findStatisticsTimeout', methods=['POST'])
 def find_statistics_timeout():
     if request.method == 'POST':
-        data = request.get_json()
-        possible_guesses = data['possible_guesses']
-        answer = data['answer']
-        active_row = int(data['active_row']) - 1
         try:
+            data = request.get_json()
+            possible_guesses = data['possible_guesses']
+            answer = data['answer']
+            active_row = int(data['active_row']) - 1
+            print(len(possible_guesses), answer, active_row)
             wordle_util.run_statistics(possible_guesses, answer, active_row)
         except Exception as e:
             print(str(e))
-            traceback.format_exc()
+            print(traceback.format_exc())
         return jsonify({'message': 'ok'})
     return jsonify({'error': 'bad request'}), RESP_BAD_REQUEST
 
@@ -98,7 +99,7 @@ def find_statistics_timeout():
 def get_results_statistics():
     if request.method == 'GET':
         if slh.is_locked():
-            return jsonify({'message': 'locked'}), RESP_OK
+            return jsonify({'message': 'locked'}), RESP_LOCKED
         else:
             stats = wordle_util.get_statistics()
-            return jsonify(stats), RESP_LOCKED
+            return jsonify(stats), RESP_OK

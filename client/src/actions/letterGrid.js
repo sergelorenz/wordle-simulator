@@ -44,6 +44,7 @@ export const setAlertTimed = message => dispatch => {
 }
 
 export const setAnswer = newWord => dispatch => {
+    console.log(`new answer was set to ${newWord}`)
     dispatch({
         type: SET_ANSWER,
         payload: newWord

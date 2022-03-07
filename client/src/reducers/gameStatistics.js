@@ -1,4 +1,4 @@
-import { SET_POSSIBLE_GUESSES, SET_GUESSES_COLS, SET_GUESSES_PAGE, START_LOADING_GUESSES, STOP_LOADING_GUESSES, SET_PAGE_NUMBER_FOCUS } from "../actions/types";
+import { SET_POSSIBLE_GUESSES, SET_GUESSES_COLS, SET_GUESSES_PAGE, START_LOADING_GUESSES, STOP_LOADING_GUESSES, SET_PAGE_NUMBER_FOCUS, START_LOADING_STATS, STOP_LOADING_STATS, SET_STATISTICS_FIGURES } from "../actions/types";
 
 const initialState = {
     possibleGuesses: [],
@@ -22,7 +22,7 @@ const initialState = {
             value: "0"
         },
         min_efficiency_next_guess: {
-            name: "min EFFICIENCY OF NEXT GUESS",
+            name: "MIN EFFICIENCY OF NEXT GUESS",
             value: "0"
         },
         ave_efficiency_next_guess: {
@@ -66,6 +66,27 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 pageNumberFocus: payload
+            }
+        case START_LOADING_STATS:
+            return {
+                ...state,
+                loadingStats: true
+            }
+        case STOP_LOADING_STATS:
+            return {
+                ...state,
+                loadingStats: false
+            }
+        case SET_STATISTICS_FIGURES:
+            return {
+                ...state,
+                statisticsFigures: {
+                    possible_guesses: payload.possible_guesses,
+                    efficiency_guess: payload.efficiency_guess,
+                    max_efficiency_next_guess: payload.max_efficiency_next_guess,
+                    min_efficiency_next_guess: payload.min_efficiency_next_guess,
+                    ave_efficiency_next_guess: payload.ave_efficiency_next_guess,
+                }
             }
         default:
             return state;
