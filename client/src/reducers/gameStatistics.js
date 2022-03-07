@@ -3,70 +3,47 @@ import { SET_POSSIBLE_GUESSES, SET_GUESSES_COLS, SET_GUESSES_PAGE, START_LOADING
 const initialState = {
     possibleGuesses: [],
     loadingGuesses: false,
-    loadingStats: false,
     possibleGuessesCols: 5,
     possibleGuessesRows: 8,
     possibleGuessesPage: 1,
     pageNumberFocus: false,
-    statisticsFigures: {
-        possible_guesses: {
-            name: "TOTAL POSSIBLE WORDS",
-            value: "0"
-        },
-        efficiency_guess: {
-            name: "EFFICIENCY OF PREVIOUS GUESS",
-            value: "-"
-        },
-        max_efficiency_next_guess: {
-            name: "MAX EFFICIENCY OF NEXT GUESS",
-            value: "0"
-        },
-        min_efficiency_next_guess: {
-            name: "min EFFICIENCY OF NEXT GUESS",
-            value: "0"
-        },
-        ave_efficiency_next_guess: {
-            name: "AVERAGE EFFICIENCY OF NEXT GUESS",
-            value: "0"
-        }
-    }
-}
+};
 
 // eslint-disable-next-line
 export default function (state = initialState, action) {
-    const {type, payload} = action;
+    const { type, payload } = action;
 
     switch (type) {
         case SET_POSSIBLE_GUESSES:
             return {
                 ...state,
-                possibleGuesses: payload
-            }
+                possibleGuesses: payload,
+            };
         case START_LOADING_GUESSES:
             return {
                 ...state,
-                loadingGuesses: true
-            }
+                loadingGuesses: true,
+            };
         case STOP_LOADING_GUESSES:
             return {
                 ...state,
-                loadingGuesses: false
-            }
+                loadingGuesses: false,
+            };
         case SET_GUESSES_COLS:
             return {
                 ...state,
-                possibleGuessesCols: payload
-            }
+                possibleGuessesCols: payload,
+            };
         case SET_GUESSES_PAGE:
             return {
                 ...state,
-                possibleGuessesPage: payload
-            }
+                possibleGuessesPage: payload,
+            };
         case SET_PAGE_NUMBER_FOCUS:
             return {
                 ...state,
-                pageNumberFocus: payload
-            }
+                pageNumberFocus: payload,
+            };
         default:
             return state;
     }
