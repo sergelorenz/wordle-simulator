@@ -4,7 +4,7 @@ import requests
 from src import app
 
 from src.util import wordle_util
-from config import RESP_OK, RESP_BAD_REQUEST
+from config import RESP_OK, RESP_BAD_REQUEST, RESP_ERROR
 
 
 @app.route('/')
@@ -37,19 +37,20 @@ def find_correct_guesses():
         latest_column = int(data['latest_column']) - 1
         list_guesses = data['list_guesses']
         list_feedbacks = data['list_feedbacks']
+        try:
+            if latest_column == -1:
+                wordle_util.find_correct_guesses(latest_column, list_guesses[0], list_feedbacks[0])
+            else:
+                list_guesses = data['list_guesses']
+                list_feedbacks = data['list_feedbacks']
 
-        if latest_column == -1:
-            wordle_util.find_correct_guesses(latest_column, list_guesses[0], list_feedbacks[0])
-        else:
-            list_guesses = data['list_guesses']
-            list_feedbacks = data['list_feedbacks']
+                latest_guess = list_guesses[latest_column]
+                latest_feedback = list_feedbacks[latest_column]
 
-            latest_guess = list_guesses[latest_column]
-            latest_feedback = list_feedbacks[latest_column]
-
-            wordle_util.find_correct_guesses(latest_column, latest_guess, latest_feedback)
-        
-        return jsonify({'message': 'done'}), RESP_OK
+                wordle_util.find_correct_guesses(latest_column, latest_guess, latest_feedback)
+            return jsonify({'message': 'done'}), RESP_OK
+        except Exception as e:
+            return jsonify({'message': 'error'}), RESP_ERROR
     return jsonify({'error': 'bad request'}), RESP_BAD_REQUEST
 
 
