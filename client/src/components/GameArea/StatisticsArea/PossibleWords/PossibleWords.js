@@ -44,20 +44,20 @@ const PossibleWords = ({
                 gridLetters,
                 feedbacks
             );
-            try {
-            } catch (err) {
-                setAlertTimed(err.message);
-            } finally {
+            if (response.status === 200) {
                 setTimeout(() => {
                     stopLoadingGuesses();
                     setGuessesPage(1);
                 }, 2000);
+            } else {
+                setAlertTimed('Server is still gathering possible words');
             }
         }
 
         function getResultsCorrectGuesses() {
+            let counter = 0;
             let interval = setInterval(async () => {
-                console.log('Still loading!')
+                counter++;
                 const response = await getResultsCorrectGuessesApi();
                 let newPossibleGuesses;
                 try {
@@ -67,8 +67,7 @@ const PossibleWords = ({
                     clearInterval(interval);
                     setAlertTimed(err.message);
                 }
-                if (!loadingGuesses) {
-                    console.log('NO longer loading!')
+                if (!loadingGuesses || counter === 5) {
                     clearInterval(interval);
                 }
             }, 2000);

@@ -104,6 +104,8 @@ const LetterGrid = ({numLetterIndex, setNumLetters, setAnswer, setAlertTimed, se
   }
 
   const handleNewGameClick = e => {
+    console.log('New Game Clicked')
+    e.target.blur();
     setNumLetters(numLetterIndex);
   }
 
