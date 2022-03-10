@@ -20,12 +20,13 @@ const TableNavigation = ({
     possibleGuessesCols,
     possibleGuesses,
     numLetterIndex,
+    feedbacks
 }) => {
     const [page, setPage] = useState(1)
 
     useEffect(() => {
         setPage(1);
-    }, [numLetterIndex])
+    }, [numLetterIndex, feedbacks])
 
     const handlePageNumberOnChange = e => {
         const val = e.target.value;
@@ -127,7 +128,8 @@ TableNavigation.propTypes = {
     possibleGuesses: PropTypes.array,
     possibleGuessesCols: PropTypes.number.isRequired,
     possibleGuessesRows: PropTypes.number.isRequired,
-    numLetterIndex: PropTypes.number.isRequired
+    numLetterIndex: PropTypes.number.isRequired,
+    feedbacks: PropTypes.array.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -136,7 +138,8 @@ const mapStateToProps = state => ({
     possibleGuesses: state.gameStatistics.possibleGuesses,
     possibleGuessesCols: state.gameStatistics.possibleGuessesCols,
     possibleGuessesRows: state.gameStatistics.possibleGuessesRows,
-    numLetterIndex: state.letterGrid.numLetterIndex
+    numLetterIndex: state.letterGrid.numLetterIndex,
+    feedbacks: state.letterGrid.letterGridCellFeedback
 });
 
 export default connect(mapStateToProps, {setGuessesPage, setAlertTimed, setPageNumberFocus})(TableNavigation)
