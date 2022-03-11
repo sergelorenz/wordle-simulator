@@ -18,13 +18,11 @@ const StatisticsArea = () => {
 };
 
 StatisticsArea.propTypes = {
-    loadingStats: PropTypes.bool.isRequired,
-    statisticsFigures: PropTypes.object.isRequired
+    loadingStats: PropTypes.bool
 };
 
 const mapStateToProps = state => ({
     loadingStats: state.gameStatistics.loadingStats,
-    statisticsFigures: state.gameStatistics.statisticsFigures
 });
 
 export default connect(mapStateToProps, {})(StatisticsArea);

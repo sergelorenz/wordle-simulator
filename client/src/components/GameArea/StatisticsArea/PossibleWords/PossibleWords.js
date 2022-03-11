@@ -37,6 +37,7 @@ const PossibleWords = ({
     useEffect(() => {
         async function findCorrectGuesses() {
             startLoadingGuesses();
+            setPossibleGuesses([]);
             const activeRow = activeCell[0];
             // eslint-disable-next-line no-unused-vars
             const response = await findCorrectGuessesApi(
