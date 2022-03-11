@@ -15,6 +15,10 @@
                 font-size: min-vw(28px);
             }
         }
+
+        &-hidden {
+            display: none;
+        }
     }
 
     .possible-words-options {
@@ -31,8 +35,12 @@
                 font-size: min-vw(20px); 
             }
 
-            div {
+            .hide-button {
                 cursor: pointer;
+
+                &-hidden {
+                    transform: rotate(180deg);
+                }
             }
 
         }
