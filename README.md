@@ -1,5 +1,5 @@
 # wordle-simulator
-A Wordle Game Simulator where you can practice your Wordle skills and gives you statistics about your guesses.
+A Wordle Game Simulator where you can practice your Wordle skills and gives you possible guesses.
 
 ## How to Setup - Frontend/Client Side
 ### 1. Clone this repository
