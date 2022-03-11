@@ -4,7 +4,7 @@ const initialState = {
     possibleGuesses: [],
     loadingGuesses: false,
     possibleGuessesCols: 5,
-    possibleGuessesRows: 14,
+    possibleGuessesRows: 10,
     possibleGuessesPage: 1,
     pageNumberFocus: false,
 };

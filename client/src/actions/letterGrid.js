@@ -9,7 +9,6 @@ import {
 } from "./types";
 
 export const setNumLetters = i => dispatch => {
-    console.log('setNumLetters Fired')
     dispatch({
         type: SET_NUM_LETTERS,
         payload: i,

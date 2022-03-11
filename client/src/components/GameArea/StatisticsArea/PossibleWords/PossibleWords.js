@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
@@ -37,6 +37,7 @@ const PossibleWords = ({
     useEffect(() => {
         async function findCorrectGuesses() {
             startLoadingGuesses();
+            setPossibleGuesses([]);
             const activeRow = activeCell[0];
             // eslint-disable-next-line no-unused-vars
             const response = await findCorrectGuessesApi(
@@ -76,6 +77,8 @@ const PossibleWords = ({
         findCorrectGuesses();
         getResultsCorrectGuesses();
     }, [feedbacks]);
+
+    const [possibleWordsHidden, setPossibleWordsHidden] = useState(false);
 
     const reshapePossibleWordsList = () => {
         const reshapedArray = createBlankArray(
@@ -123,16 +126,20 @@ const PossibleWords = ({
         );
     };
 
+    const setClassPossibleWordsList = baseClass => {
+        return possibleWordsHidden ? `${baseClass} ${baseClass}-hidden` : baseClass;
+    }
+
     return (
         <div className="possible-words">
-            <div className="possible-words-list">
+            <div className={setClassPossibleWordsList("possible-words-list")}>
                 {renderPossibleWordsList()}
             </div>
             <hr />
             <div className="possible-words-options">
                 <div className="hide-possible-words">
                     <label>Hide Possible Words</label>
-                    <div>
+                    <div onClick={e => setPossibleWordsHidden(!possibleWordsHidden)} className={setClassPossibleWordsList("hide-button")}>
                         <Triangle />
                     </div>
                 </div>
